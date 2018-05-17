@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>背景</title>
+  <style>
+    /* reset */
+    body,html {
+      margin: 0;
+      padding: 0;
+    }
+    /* the part of header */
+    header {
+      height: 6.25em;
+      background-color: #fefecc; 
+    }
+    header > span.logo {
+      display: block;
+      margin: 0 auto;
+      height: 6.25em;
+      width: 6.25em;
+      background-image: url(images/chairmanMao.jpg);
+      transition: background-image 1s;
+    }
+    header > span.logo:hover {
+      background-image: url(images/gongchan.png);
+    }
+
+    /* the part of background scroller */
+    div.backgroundFixed {
+      margin: 1em auto;
+      width: 32em;
+    }
+    div.backgroundFixed > div{
+      border-top: 1px solid black;
+      width: 32em;
+      height: 32em;
+      background-attachment: fixed;
+      background-position-x: center;
+      background-position-y: 7.25em; 
+      background-repeat: no-repeat;
+    }
+    div.backgroundFixed div.first {
+      background-image: url(images/tooopen_sy_166330022148_01.gif);
+    }
+    div.backgroundFixed div.second {
+      background-image: url(images/tooopen_sy_166330022148_02.gif);
+    }
+    div.backgroundFixed div.third {
+      background-image: url(images/tooopen_sy_166330022148_03.gif);
+    }
+    div.backgroundFixed div.fourth {
+      background-image: url(images/tooopen_sy_166330022148_04.gif);
+    }
+    
+    /* article */
+    div.spiral {
+      box-sizing: border-box;
+      width: 100%;
+      border: 1px solid black;
+      background: url(images/spiral.jpg) no-repeat fixed;
+    }
+    div.spiral article {
+      margin: 5em;
+      padding: 1em;
+      border: 1px solid black;
+      background: url(images/spiral-glassy.jpg) no-repeat fixed;
+    }
+    div.spiral article h2 {
+      margin: 1em 0;
+      padding: 1em;
+      background-color: rgba(255, 255, 144, 0.6)
+    }
+    div.spiral article h3 {
+      margin: 0.75em 0;
+      padding: 0.75em;
+      background-color: rgba(255, 255, 144, 0.5)
+      
+    }
+    div.spiral article p {
+      padding: 0.5em;
+    }
+    
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo"></span>
+  </header>
+  <div class="backgroundFixed">
+    <div class="first"></div>
+    <div class="second"></div>
+    <div class="third"></div>
+    <div class="fourth"></div>
+  </div>
+  <div class="spiral">
+    <article>
+      <h2>placeat facilis praesentium</h2>
+      <p>Soluta voluptas at est ut quos et unde eaque commodi. Harum provident amet minus sunt quo error quasi perspiciatis assumenda. Placeat esse alias quos id enim deleniti est quod libero. Incidunt consequatur dicta voluptatem omnis alias possimus non. Odit autem ipsam optio qui. Facilis excepturi laudantium totam quae occaecati porro hic.</p>
+      <p>Omnis cumque nostrum. Facilis cupiditate voluptates quos mollitia quia assumenda consequatur. Culpa in adipisci et harum repudiandae repellat et et. Temporibus dolorem nulla excepturi maxime excepturi necessitatibus voluptatem.</p>
+      <h3>explicabo quasi libero</h3>
+      <p>Numquam dolor a enim possimus provident. Sit est quod sunt qui aut quo voluptatibus. Unde amet dicta impedit dolor voluptate aliquid harum omnis quos. Sunt reiciendis nihil dolorum dolores mollitia aut. Voluptas totam non rerum illum eum dolorem. Qui nam dicta odio nisi perspiciatis architecto eveniet repellat non.</p>
+      <h3>explicabo quasi libero</h3>
+      <p>Numquam dolor a enim possimus provident. Sit est quod sunt qui aut quo voluptatibus. Unde amet dicta impedit dolor voluptate aliquid harum omnis quos. Sunt reiciendis nihil dolorum dolores mollitia aut. Voluptas totam non rerum illum eum dolorem. Qui nam dicta odio nisi perspiciatis architecto eveniet repellat non.</p>
+      <h3>explicabo quasi libero</h3>
+      <p>Numquam dolor a enim possimus provident. Sit est quod sunt qui aut quo voluptatibus. Unde amet dicta impedit dolor voluptate aliquid harum omnis quos. Sunt reiciendis nihil dolorum dolores mollitia aut. Voluptas totam non rerum illum eum dolorem. Qui nam dicta odio nisi perspiciatis architecto eveniet repellat non.</p>
+      <h3>explicabo quasi libero</h3>
+      <p>Numquam dolor a enim possimus provident. Sit est quod sunt qui aut quo voluptatibus. Unde amet dicta impedit dolor voluptate aliquid harum omnis quos. Sunt reiciendis nihil dolorum dolores mollitia aut. Voluptas totam non rerum illum eum dolorem. Qui nam dicta odio nisi perspiciatis architecto eveniet repellat non.</p>
+    </article>
+  </div>
+</body>
+</html>
