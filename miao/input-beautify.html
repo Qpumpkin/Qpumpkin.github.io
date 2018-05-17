@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>表单元素对齐</title>
+  <style>
+    * {
+      font-family: sans-serif;
+    }
+    a {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      background-image: url(https://www.google.com.hk/images/nav_logo242_hr.png);
+      background-repeat: no-repeat; 
+    }
+    a.google1 {
+      background-position: 0px -656px;
+    }
+    a.google1:hover {
+      background-position: -30px -656px;
+    }
+    a.google2 {
+      background-position: -60px -655px;
+    }
+    a.google2:hover {
+      background-position: -90px -655px;
+    }
+    a.google3 {
+      background-position: -46px -518px;
+    }
+    a.google3:hover {
+      background-position: -6px -518px;
+    }
+    a.google4 {
+      background-position: -44px -548px;
+    }
+    a.google4:hover {
+      background-position: -4px -548px;
+    }
+    .demo {
+      border-radius: 5px;
+      background-color: #fefecc;
+      line-height: 1.5em;
+    }
+    .demo .input-wrap {
+      display: inline-block;
+      box-sizing: border-box;
+      height: 1.5em;
+      padding: 0.25em 0;
+      vertical-align: top;
+    }
+    .demo .input-wrap * {
+      margin: 1.5px 0;
+      vertical-align: top;
+    }
+    .demo label {
+      display: inline-block;
+      height: 1.5em;
+    }
+    input[type="text"] {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-size: 1em;
+      height: 1.5em;
+      vertical-align: top;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="demo">
+    xx
+    <label for="duiqi">x我要对齐</label>
+    <div class="input-wrap"><input type="radio" name="duiqi" id="duiqi"></div>
+    <label for="ha">x我也要对齐</label>
+    <div class="input-wrap"><input type="checkbox" name="qile" id="haha"></div>
+    <input type="text" name="tel">
+    <br>
+    <a class="google1" href="https://www.google.com/"></a>
+    <a class="google2" href=""></a>
+    <a class="google3" href=""></a>
+    <a class="google4" href=""></a>
+  </div>
+</body>
+</html>
