@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>表格</title>
+  <style>
+    html {
+      font-family: sans-serif;
+    }
+    div.input-box {
+      display: table;
+      margin: 1em 0;
+      width: 25em;
+    }
+
+    div.input-box label {
+      display: table-cell;
+      box-sizing: border-box;
+      border: 1px solid #cfd5db;
+      border-width: 1px 0 1px 1px;
+      padding: .375em .75em;
+      line-height: 1em;
+      text-align: center;
+      border-radius: 3px 0 0 3px;
+      color: #999;
+      background-color: #e9edef;
+    }
+    div.input-box label[for="email"] {
+      border-width: 1px 1px 1px 0;
+      border-radius: 0 3px 3px 0;
+    }
+
+    div.input-box div.input-wrap {
+      display: table-cell;
+      border: 1px solid #cfd5db;
+    }
+    div.input-box input {
+      margin: 0;
+      border: none;
+      padding: .375em .75em;
+      line-height: 1em;
+      font-size: 1em;
+      color: #999;
+    }
+    
+    /* table part */
+    div.table-wrap {
+      margin: 0 auto;
+      width: 80%;
+    }
+    .table {
+      display: table;
+      margin: 2em auto;
+      border-collapse: collapse; 
+      width: 100%;
+      max-width: 100%;
+      color: #212529;
+    }
+    .table tr {
+      border-top: 1px solid #dee2e6;
+    }
+    .table thead tr {
+      border-bottom: 2px solid #dee2e6;
+    }
+    .table *[scope] {
+      font-weight: bold;
+    }
+    .table th, .table td {
+      padding: .75em;
+      text-align: inherit;
+    }
+
+    .table-dark {
+      border-color: #32383e; 
+      color: #fff;
+      background-color: #212529;
+    }
+    .table-dark tr,.table-dark thead tr {
+      border-color: #32383e;
+    }
+    
+    .table-striped tr:nth-child(odd) {
+      background-color: rgba(0, 0, 0, .05);
+    }
+    .table-dark .table-striped tr:nth-child(odd) {
+      background-color: rgba(255, 255, 255, .05)
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: rgba(0, 0, 0, 0.075);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="input-box">
+    <label for="username">@@</label>
+    <div class="input-wrap"><input type="text" name="username" id="username"></div>
+  </div>
+  <div class="input-box">
+    <div class="input-wrap"><input type="text" name="email" id="email"></div>
+    <label for="email">@example.com</label>
+  </div>
+  <div class="table-wrap table-hover">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First</th>
+          <th>Last</th>
+          <th>Handle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First</th>
+          <th>Last</th>
+          <th>Handle</th>
+        </tr>
+      </thead>
+      <tbody class="table-striped">
+        <tr>
+          <th>1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First</th>
+          <th>Last</th>
+          <th>Handle</th>
+        </tr>
+      </thead>
+      <tbody class="table-striped">
+        <tr>
+          <th>1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
