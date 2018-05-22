@@ -82,55 +82,53 @@
       transition-duration: .3s;
       transition-timing-function: steps(27,start);
     }
-    nav > ul {
-      margin: 1em;
+
+    /*the style of all of the option listings */
+    nav ul {
       box-sizing: border-box;
+      list-style: none;
       padding: 0;
-      border-bottom: 1px solid black; 
-      width: 10em;
-      height: 100px;
       line-height: 100px;
       vertical-align: middle;
-      overflow: hidden;
-      list-style: none;
+      height: 100px;
     }
-    nav > ul > li {
+
+    /*  first-degree menu */
+    nav > ul {
+      margin: 1em;
+      width: 10em;
+      border-bottom: 1px solid black; 
+    }
+    nav > ul:hover,nav > ul li:hover {
+      overflow: visible;
+      background-color: #ddd;
+    }
+
+    /* the options that have child elements */
+    nav > ul li {
       margin: 0;
       box-sizing: border-box;
       border-bottom: 1px solid black;  
       padding: 0;
       width: inherit;
       height: inherit;
-      line-height: 100px;
     }
-    nav > ul:hover {
-      overflow: visible;
-      background-color: #ddd;
-    }
-    nav > ul > li {
+    nav > ul li {
       overflow: hidden;
     }
-    nav > ul > li:hover {
-      overflow: visible;
-      background-color: #ddd;
-    }
-    nav > ul > li > ul{
+
+    /* child menu position */
+    nav > ul > li ul{
       position: relative;
       top: -100px;
       left: 10em;
-      margin: 0;
-      padding: 0;
-      list-style: none;
     }
-    nav > ul > li > ul > li {
-      box-sizing: border-box;
-      border-bottom: 1px solid black;
-      width: 10em;
-      height: 100px;
-      line-height: 100px;
-    }
-     nav > ul > li > ul > li:hover {
-      background-color: #ddd; 
+    /* arrow style */
+     nav > ul > li ul::before {
+      content: ">";
+      display: inline-block;
+      position: absolute;
+      left: -1em;
      }
 
   </style>
@@ -151,10 +149,38 @@
     <ul>一
       <li>1
         <ul>
-          <li>①</li>
-          <li>②</li>
-          <li>③</li>
-          <li>④</li>
+          <li>①
+            <ul>
+              <li>1</li>
+              <li>2</li>
+              <li>3</li>
+              <li>4</li>
+            </ul>
+          </li>
+          <li>②
+            <ul>
+              <li>1</li>
+              <li>2</li>
+              <li>3</li>
+              <li>4</li>
+            </ul>
+          </li>
+          <li>③
+            <ul>
+              <li>1</li>
+              <li>2</li>
+              <li>3</li>
+              <li>4</li>
+            </ul>
+          </li>
+          <li>④
+            <ul>
+              <li>1</li>
+              <li>2</li>
+              <li>3</li>
+              <li>4</li>
+            </ul>
+          </li>
         </ul>
       </li>
       <li>2
