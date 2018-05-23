@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    /* 反正其他方法原理我都懂,就只写这一个好了 */
+    table {
+      margin: 1em auto;
+      text-align: center;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+    table td {
+      width: 2em;
+      height: 2em;
+    }
+    
+    /* in this condition, there's bug in firefox */
+    table tr,table col {
+      border: 1px solid blue;
+    }
+    table td:hover {
+      border: 1px solid red;
+    }
+    
+    table tr > td:hover{
+      border:1px solid red;
+    }
+    div.wrap {
+      margin: 1em auto;
+      width: 200px;
+    }
+    span.subscribe {
+      display: table-cell;
+      width: 200px;
+      height: 100px;
+      border-bottom: 1px solid red; 
+      font-size: 10px;
+      color: black;
+      vertical-align: bottom;
+      background-color: #a0d0e0;
+    }
+    span.subscribe:hover {
+      font-size: 50px;
+      color: #fff;
+      background-color: green;
+      transition: font-size 1s;
+    }
+
+    html {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+    body {
+      margin:0 0 100px;/* 因为footer已经脱离正常流了所以body缩水了100px,把100px补上 */
+      height: 100%;
+    }
+    footer{
+      box-sizing: border-box;
+      width: 100%;
+      border: 1px solid black;
+      line-height: 100px;
+      position: absolute;
+      text-align: center;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <colgroup>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+  </table>
+  <div class="wrap"><span class="subscribe">订阅博客</span></div>
+  <footer>
+    你看不到我，你看不到我。
+  </footer>
+</body>
+</html>
