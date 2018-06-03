@@ -1,0 +1,415 @@
+/* normalize */
+html,body {
+  font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+h2 {
+  margin: 0 auto;
+  width: 1226px;
+}
+.container {
+  position: relative;
+  margin: 0 auto;
+  width: 1226px;
+}
+/* -------- */
+body > header {
+  font-size: 24px;
+}
+header .activity {
+  padding: 1em 0 1em 22.5%;
+  background-image: linear-gradient(45deg, #cd53ff, #9025ff);
+}
+header .activity a {
+  display: inline-block;
+  padding: 0 1em;
+  line-height: 2em;
+  border-radius: 1em;
+  color: #a536ff;
+  background-color: #fff;  
+}
+header .activity h2,
+header .activity p {
+  color: #fff;
+}
+header .activity h2 {
+  display: inline-block;
+  margin: 0 0 0 2em;
+  font-size: 1.1em;
+  vertical-align: 15px;
+}
+header .activity p {
+  margin: -1em 0 0 16.8em;
+  font-size: .75em;
+}
+
+body > header nav { 
+  background-color: #333;
+  font-size: 12px;
+}
+header nav .container > * {
+  display: inline-block;
+  padding: 1em 0;  
+}
+header nav .container .nav-link li,
+header nav .container .user li {
+  display: inline-block;
+}
+header nav .container .nav-link li:nth-last-child(n+2)::after,
+header nav .user li:nth-last-child(n+2)::after {
+  content: "|";
+  color: #9bb086;
+  margin: 0 5px;
+}
+header nav .container .nav-link li a,
+header nav .container .user li a {
+  color: #9bb086;
+}
+header nav .container .nav-link li a:hover,
+header nav .container .user li a:hover {
+  color: #fff;
+}
+
+main > header {
+  padding: 1.5em 0;
+}
+main > header .container .logo {
+  width: 55px;
+  margin-right: 180px;
+  line-height: 55px;
+  text-indent: -999em;
+  background: url(mi-home.png) 50% 50% no-repeat orange;
+}
+main > header > .container * {
+  display: inline-block;
+}
+main > header .header-nav li {
+  padding-right: 15px;
+  line-height: 55px;
+  cursor: pointer;
+}
+main > header .header-nav li:hover {
+  color: orange;
+}
+
+main > header .search {
+  position: absolute;
+  right: 0;
+  outline: 1px solid #e0e0e0;  
+}
+main > header .search form {
+  font-size: 0;
+}
+main > header .search input[type="search"] {
+  height: 50px;
+  margin: 0;
+  padding: 1em;
+  border: none;
+  border-right: 1px solid #e0e0e0;
+}
+main > header .search input[type="submit"] {
+  width: 50px;height: 50px;
+  border: none;
+}
+main .product-home {
+  position: relative;
+  width: 1226px; height: 640px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+main .product-home aside {
+  position: absolute;
+  width: 234px; height: 460px;
+  background: rgba(0, 0, 0, 0.6);
+}
+main .product-home aside > nav > ul {
+  padding: 20px 0;
+}
+main .product-home aside > nav > ul > li {
+  overflow: hidden;
+}
+main .product-home aside > nav > ul > li > a {
+  display: block;
+  padding: 0 30px;
+  line-height: 42px;
+  color: #fff;
+}
+
+main .product-home .slideshow .slide img {
+  width: 1226px; height: 460px;
+}
+main .product-home .home-product {
+  margin-top: 10px;
+}
+main .product-home .home-product .special-entrance {
+  width: 234px;
+  padding: 10px 0;
+  font-size: 0;
+  background-color: #5f5750;
+}
+main .product-home .home-product .special-entrance li {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 78px; height: 75px;
+  padding-top: 50px;
+  border-right: 1px solid #665e57;
+  text-align: center;
+}
+main .product-home .home-product .special-entrance li:nth-child(n+4) {
+  border-top: 1px solid #665e57;
+}
+main .product-home .home-product .special-entrance li:nth-child(3n) {
+  border-right: none;
+}
+main .product-home .home-product .special-entrance li a {
+  font-size: 14px;
+  color: rgba(255, 255, 255,0.6);
+}
+main .product-home .home-product .hot-product {
+  height: 170px;
+  margin: -170px 0 0 234px;
+  font-size: 0;
+}
+main .product-home .home-product .hot-product li {
+  display: inline-block;
+  margin-left: 14.33px;
+}
+main .product-home .home-product .hot-product img {
+  height: 170px;
+}
+section > h2 {
+  line-height: 58px;
+}
+/***** section layout css *****/
+section {
+  padding-top: 26px;
+  background-color: #f5f5f5;
+}
+.display {
+  position: relative;
+  width: 1226px;
+  margin: 0 auto;
+}
+.display .item-list,
+.display .hot-sale {
+  font-size: 0;
+}
+section .hot-sale {
+  width: 234px;
+}
+section .hot-sale li {
+  width: 234px;
+  height: 300px;
+  margin-bottom: 14px;
+  background-image: url(https://i1.mifile.cn/a4/xmad_15232433421155_vCzhJ.jpg);
+  background-size: contain;
+}
+section .item-list > li {
+  display: inline-block;
+  width: 234px;
+  height: 300px;
+  margin: 0 0 14px 14px;
+}
+section .item-list > li:first-child {
+  margin-left: 0;
+}
+section .menu {
+  position: absolute;
+  top: -42px;
+  right: 0;
+  padding-top: 16px;
+  height: 26px;
+  font-size: 16px;
+}
+section .menu > li {
+  display: inline-block;
+  height: 26px;
+  margin-left: 30px;
+}
+section .menu .item-list {
+  position: absolute;
+  top: 42px;
+}
+section .menu .item-list>li {
+  display: block;
+  float: left;
+  width: 234px;
+  height: 300px;
+  margin-left: 14px;
+  margin-bottom: 14px;
+  background-color: #fff;
+}
+section .menu .item-list .last-item,
+section .menu .item-list .viewmore {
+  height: 143px;
+}
+section .advertise {
+  width: 1226px;
+  height: 120px;
+  margin: 0 auto;
+  padding: 40px 0;
+  background-color: lemonchiffon;
+}
+/***** xiaomi sec-kill *****/
+section.sec-kill .time-prompt {
+  box-sizing: border-box;
+  width: 234px;
+  height: 340px;
+  border-top: 1px solid red;
+}
+section.sec-kill .item-list {
+  height: 340px;
+  margin: -340px 0 0 234px;
+  overflow: hidden;
+}
+section.sec-kill .item-list > li {
+  box-sizing: border-box;
+  height: 340px;
+  margin-left: 14px;
+  border-top: 1px solid green; 
+  background-color: #fff;
+}
+/***** mobile-phone *****/
+section.mobile-phone .hot-sale {
+  height: 614px;
+  background-color: #fbefe3;
+}
+section.mobile-phone .item-list {
+  margin: -614px 0 0 234px;
+}
+section.mobile-phone .display .item-list li{
+  margin-left: 14px;
+  background-color: #fff;
+}
+
+/***** household-appliances *****/
+section.household-appliances .hot-sale li {
+  height: 300px;
+  background-image: url(https://i1.mifile.cn/a4/xmad_15266395374048_JnZQo.jpg);
+}
+section.household-appliances .menu > li > .item-list {
+  left: -698.65px;
+}
+/***** smart *****/
+section.smart .hot-sale li {
+  background-image: url(https://i1.mifile.cn/a4/xmad_15232433421155_vCzhJ.jpg);
+}
+section.smart .menu .item-list {
+  left: -648.2px;
+}
+
+/***** collocation *****/
+section.collocation .menu>li>.item-list {
+  left: -650.65px;
+}
+section.gadgets .menu > li > .item-list {
+  left: -682.65px;
+}
+section.related-product .menu > li > .item-list {
+  left: -632.2px;
+}
+
+/* ---产品推荐--- */
+section.recommend .item-list {
+  height: 300px;
+  overflow: hidden;
+}
+section.recommend .item-list li {
+  background-color: #ccc;
+}
+/* 热评产品 */
+section.hot-product .item-list > li {
+  width: 296px;
+  height: 415px;
+  background-color: #ccc;
+}
+/* 内容 */
+.content .item-list > li {
+  width: 296px;
+  height: 420px;
+  border-top: 1px solid crimson;
+}
+/* 视频 */
+.video .item-list > li {
+  width: 296px;
+  height: 285px;
+}
+
+footer .footer-service {
+  padding: 27px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0;
+}
+footer .footer-service > li {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 245.2px;
+  height: 25px;
+  border-right: 1px solid #eee;
+  font-size: 16px;
+  text-align: center;
+}
+footer .footer-service>li:last-child {
+  border-right: none; 
+}
+footer .footer-link {
+  width: 960px;
+  margin: 0;
+  padding: 40px 0;
+  font-size: 0;
+}
+footer .footer-link dl {
+  display: inline-block;
+  width: 160px;
+  height: 112px;
+  margin: 0;
+  font-size: 14px;
+}
+footer .footer-link dl dt {
+  margin-bottom: 26px;
+}
+footer .footer-link dl dd {
+  margin-left: 0;
+}
+footer .tel {
+  width: 250px;
+  height: 112px;
+  border-left: 1px solid #666;
+  margin: -152px 0 40px 975px;
+}
+
+footer .xiaomi {
+  width: 683.4px;
+  height: 106px;
+  padding: 30px 0 30px 67px;
+  font-size: 0;
+  background: url(mi-home.png) no-repeat;
+}
+footer .xiaomi li {
+  display: inline-block;
+  font-size: 12px;
+}
+footer .xiaomi li::after {
+  content: "|";
+}
+
+footer .brand {
+  margin: -136px 0 0 683.4px;
+}
+footer .brand li {
+  display: inline-block;
+  height: 28px;
+}
+footer p {
+  text-align: center;
+  font-family: "楷体";
+}
