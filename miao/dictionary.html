@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>词典</title>
+  <style>
+  html,body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .dictionary {
+    height: 100%;
+  }
+  .header {
+    height: 70px;
+    margin: 0 400px 0 200px;
+  }
+  .sidebar > h1{
+    padding-right: 7px;
+    text-align: right;
+  }
+  .sidebar {
+    width: 200px;
+    height: 100%;
+    background-color: #eaeef3;
+    box-shadow: inset -5px 0 5px 0 #ddd;
+  }
+  .search {
+    float: left;
+  }
+  .history {
+    float: right;
+  }
+  .vocabulary {
+    float: right;
+  }
+  .container {
+    margin: 0 400px 0 200px;
+    height: calc(100% - 70px);
+    box-shadow: inset -5px 2px 5px 0 #ddd;
+  }
+  </style>
+</head>
+<body>
+  <div class="dictionary">
+    <div class="search sidebar">
+      <h1>OALD Se7en</h1>
+    </div>
+    <div class="history sidebar">
+      <h1>History</h1>
+    </div>
+    <div class="vocabulary sidebar">
+      <h1>Vocabulary</h1>
+    </div>
+    <div class="header"></div>
+    <div class="container"></div>
+  </div>
+</body>
+</html>

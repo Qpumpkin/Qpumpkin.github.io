@@ -1,0 +1,131 @@
+<script id="ch0105/01">
+
+  let num = Number(prompt("Please enter the number of students."));
+  let sum = 0;
+  for (let i=0; i<num; i++) {
+    sum += Number(prompt("Please enter student" + i+1 + "'s age!"));
+  }
+  let average = (sum/num).toFixed(2);
+  console.log(average);
+
+</script>
+
+<script id="ch0105/02">
+  let sum = 0;
+  for (let i=0; i<12; i++) {
+    sum += Number(prompt("please enter how much you save in month" + i+1));
+  }
+  let average = (sum/12).toFixed(2);
+  console.log("$" + average);
+</script>
+<script id="ch0105/03">
+  let num = Number(prompt("Please enter sample size!"));
+  let sum = 0;
+  for (let i=0; i<num; i++) {
+    sum += Number(prompt("Please enter the value of sample" + i));
+  }
+  let average = (sum/num).toFixed(4);
+  console.log(average);
+</script>
+<script id="ch0105/04">
+  let num = Number(prompt("Please enter the number of digit!"));
+  let sum = 0;
+  for (let i=0; i<num; i++) {
+    sum += Number(prompt("enter the digit!" + i));
+  }
+  let average = (sum/num).toFixed(5);
+  console.log(sum + " " + average);
+</script>
+<script id="ch0105/05">
+  let num = Number(prompt("Please enter the number of student!"));
+  let max = 0;
+  for (let i=0; i<num; i++) {
+    max = Math.max(max,Number(prompt("enter the score!" + i)));
+  }
+  console.log(max);
+</script>
+<script id="ch0105/06">
+  let num = Number(prompt("Please enter the number of digits!"));
+  let max = 0, min = Infinity;
+  let current;
+  for (let i=0; i<num; i++) {
+    current = Number(prompt("enter the score!" + i));
+    max = Math.max(max,current);
+    min = Math.min(min,current);
+  }
+  console.log(max - min);
+</script>
+<script id="ch0105/07">
+  let days = Number(prompt("Please enter how many days in period of competition?"));
+  let gold = 0, sliver = 0, copper = 0;
+  for (let i=0; i<days; i++) {
+    gold += Number(prompt("please enter the number of gold medal."));
+    sliver += Number(prompt("please enter the number of sliver medal."));
+    copper += Number(prompt("please enter the number of copper medal."));
+  }
+  let sum = gold + sliver + copper;
+  console.log(gold + " " + sliver + " " + copper + " " + sum);
+</script>
+<script id="ch0105/08">
+  let polygon = Number(prompt("please enter the polygon's "));
+  let sumAngle = 180 * (polygon-2);
+  let knownDeg = 0;
+  for (let i=0; i<polygon-1; i++) {
+    knownDeg += Number(prompt("please enter the deg of angle " + i+1));
+  }
+  let unknownAngle = sumAngle - knownDeg;
+  console.log(unknownAngle);
+</script>
+<script id="ch0105/09">
+  let start = Number(prompt("please enter the first number."));
+  let end = Number(prompt("please enter the second number."));
+  if (start%2 == 0) {
+    let begin = start + 1;
+  } else {
+    let begin = start;
+  }
+  let sum = 0;
+  for (let i=begin; i<=end; i+=2) {
+    sum += i;
+  }
+  console.log(sum);
+</script>
+<script id="ch0105/10">
+  let start = Number(prompt("please enter the first number."));
+  let end = Number(prompt("please enter the second number."));
+  let sum = 0;
+  for(let i=start; i<=end; i++) {
+    if (i%17 == 0) {
+      sum += i;
+    }
+  }
+  console.log(sum);
+</script>
+<script id="ch0105/11">
+  let num = Number(prompt("please enter the number of digits."));
+  let times1 = 0;
+  let times5 = 0;
+  let times10 = 0;
+  for (let i=0; i<num; i++) {
+    switch(Number(prompt("please enter the digit" + i+1))) {
+      case 1: times1++; break;
+      case 5: times5++; break;
+      case 10: times10++; break;
+      default: break;
+    }
+  }
+  console(times1 + "\n" + times5 + "\n" + times10);
+</script>
+<script id="ch0105/12">
+  let num = Number(prompt("please enter the number of digits."));
+  let target = Number(prompt("please enter the target number."));
+  let count = 0;
+  let current;
+  for (let i=0; i<num; i++) {
+    current = Number(prompt("please enter the number."));
+    if (current == target) {
+      count += 1;
+    }
+  }
+  console.log(count);
+</script>
