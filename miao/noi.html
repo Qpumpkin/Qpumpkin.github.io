@@ -1,0 +1,54 @@
+<script id="ch0105/01">
+
+  let num = Number(prompt("Please enter the number of students."));
+  let sum = 0;
+  for (let i=0; i<num; i++) {
+    sum += Number(prompt("Please enter student" + i+1 + "'s age!"));
+  }
+  let average = (sum/num).toFixed(2);
+  console.log(average);
+
+</script>
+
+<script id="ch0105/02">
+  let sum = 0;
+  for (let i=0; i<12; i++) {
+    sum += Number(prompt("please enter how much you save in month" + i+1));
+  }
+  let average = (sum/12).toFixed(2);
+  console.log("$" + average);
+</script>
+<script id="ch0105/03">
+  let num = Number(prompt("Please enter sample size!"));
+  let sum = 0;
+  for (let i=0; i<num; i++) {
+    sum += Number(prompt("Please enter the value of sample" + i));
+  }
+  let average = (sum/num).toFixed(4);
+  console.log(average);
+</script>
+<script id="ch0105/04">
+  let num = Number(prompt("Please enter the number of digit!"));
+  let sum = 0;
+  for (let i=0; i<num; i++) {
+    sum += Number(prompt("enter the digit!" + i));
+  }
+  let average = (sum/num).toFixed(5);
+  console.log(sum + " " + average);
+</script>
+<script id="ch0105/05">
+  let num = Number(prompt("Please enter the number of student!"));
+  let max = 0;
+  for (let i=0; i<num; i++) {
+    max = Math.max(max,Number(prompt("enter the score!" + i)));
+  }
+  console.log(max);
+</script>
+<script id="ch0105/06">
+  // let num = Number(prompt("Please enter the number of student!"));
+  // let max = 0;
+  // for (let i=0; i<num; i++) {
+  //   max = Math.max(max,Number(prompt("enter the score!" + i)));
+  // }
+  // console.log(max);
+</script>
