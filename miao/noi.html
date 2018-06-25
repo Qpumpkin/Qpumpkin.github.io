@@ -79,10 +79,11 @@
 <script id="ch0105/09">
   let start = Number(prompt("please enter the first number."));
   let end = Number(prompt("please enter the second number."));
+  let begin;
   if (start%2 == 0) {
-    let begin = start + 1;
+    begin = start + 1;
   } else {
-    let begin = start;
+    begin = start;
   }
   let sum = 0;
   for (let i=begin; i<=end; i+=2) {
@@ -114,7 +115,7 @@
       default: break;
     }
   }
-  console(times1 + "\n" + times5 + "\n" + times10);
+  console.log(times1 + "\n" + times5 + "\n" + times10);
 </script>
 <script id="ch0105/12">
   let num = Number(prompt("please enter the number of digits."));
@@ -129,3 +130,7 @@
   }
   console.log(count);
 </script>
+
+<!-- <script id="ch0105/13">
+
+</script> -->
