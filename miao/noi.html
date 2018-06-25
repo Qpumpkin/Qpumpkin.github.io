@@ -130,3 +130,156 @@
   }
   console.log(count);
 </script>
+<script id="sort" sample-input="4 1 7" sample-output="1 4 7" comment="输入三个数，把此三个数按升序输出">
+  let a = Number(prompt("please enter a number"));
+  let b = Number(prompt("please enter a number"));
+  let c = Number(prompt("please enter a number"));
+  let save;
+  if (a > b) {
+    save = a;
+    a = b;
+    b = save;
+  }
+  if (b > c) {
+    save = b;
+    b = c;
+    c = save;
+  }
+  if (a > b) {
+    save = a;
+    a = b;
+    b = save;
+  }
+  console.log(a+" "+b+" "+c);
+</script>
+<script id="narcissistic " sample-input="153" sample-output="YES" comment="判断一个数是否为水仙花数">
+  let number = String(prompt("please enter a number."));
+  let length = number.length;
+  let sum = 0;
+  for (let i=0; i<length; i++) {
+    sum += number[i] ** length;
+  }
+  if (sum == number) {
+    console.log("YES");
+  } else {
+    console.log("NO");
+  }
+</script>
+<script id="narcissistics" sample-input="" sample-output="" comment="找出100到10000以内所有的水仙花数">
+let length, current, sum = 0;
+for (let i=100; i<=100000; i++) {
+  current = i.toString();
+  length = current.length;
+  for (let num=0; num<length; num++) {
+    sum += current[num] ** length;  
+  }
+  if (sum == i) {
+    console.log(i);
+  }
+  sum = 0;
+}
+</script>
+<script id="palindrom" sample-input="12321" sample-output="YES" comment="判断一个非负整数是否为回文数字">
+  let input = String(prompt("please enter a number."));
+  let length = input.length;
+  for (let i=0; i<(length/2); i++) {
+    if (input[i] != input[length-1-i]) {
+      console.log("NO");
+      break;
+    } else if (i == Math.ceil(length/2)-1) {
+      console.log("YES");
+    }
+  }
+</script>
+<script id="weekday" sample-input="2018 6" sample-output="5" comment="输入年份与月份，给出该年该月的第一天是星期几">
+  let year = Number(prompt("please enter a number."));
+  let month = Number(prompt("please enter a number of month"));
+
+</script>
+<script id="complete-number" sample-input="6" sample-output="YES" comment="判断一个数是否为完全数">
+  let number = Number(prompt("please enter a number."));
+  let sum = 1;
+  for (let i=2; i<=Math.sqrt(number); i++) {
+    if (number%i == 0) {
+      sum += i+(number/i) ;
+    }
+  }
+  if (sum == number) {
+    console.log("YES");
+  } else {
+    console.log("NO");
+  }
+  sum = 1;
+</script>
+<script id="complete-numbers" sample-input="" sample-output="" comment="输出10000以内所有的完全数">
+  let sum = 1;
+  for (let num=2; num<=10000; num++) {
+    for (let i=2; i<=Math.sqrt(num); i++) {
+      if (num%i == 0) {
+        sum += i+(num/i);
+      }
+    }
+    if (sum == num) {
+      console.log(num);
+    }
+    sum = 1;
+  }
+</script>
+<script id="prime" sample-input="7" sample-output="YES" comment="判断一个数是否为素数">
+  let input = Number(prompt("please enter a number."));
+  //必须大于3
+  for (let i=2; i<=Math.sqrt(input); i++) {
+    if (input%i == 0) {
+      console.log("NO");
+      break;
+    } else if (i == Math.floor(Math.sqrt(input))) {
+      console.log("YES");
+    }
+  }
+</script>
+<script id="primes" sample-input="" sample-output="" comment="输出100以内所有的素数">
+  console.log(2);
+  for (let num=3; num<100; num++) {
+    for (let i=2; i<=Math.sqrt(num); i++) {
+      if (num%i == 0) {
+        break;
+      } else if (i == Math.floor(Math.sqrt(num))) {
+        console.log(num);
+      }
+    }
+  }
+</script>
+<script id="itob" sample-input="123" sample-output="123" comment="数字转换成字符串">
+  let input = Number(prompt("please enter a number."));
+  let output = input + "";
+  console.log(output);
+</script>
+<script id="lcf&lcm" sample-input="12 9" sample-output="36 3" comment="给定两个数，求它们的最小公倍数和最大公约数">
+  let a = Number(prompt("please enter a number."));
+  let b = Number(prompt("please enter a number."));
+  let min = a > b ? a : b;
+  let GCD;
+  for (let i=1; i<=min; i++) {
+    if (a%i==0 && b%i==0) {
+      GCD = i;
+    }
+  }
+  let LCM = (a/GCD) * b;
+  console.log(LCM + " " + GCD);
+</script>
+<script id="7" sample-input="" sample-output="" comment="敲7">
+  for (let i=7; i<=100; i++) {
+    if (i%7==0 || (i.toString().indexOf("7"))!=-1) {
+      console.log(i);
+    }
+  }
+</script>
+<script id="sqrt" sample-input="2" sample-output="1.414" comment="不使用Math.sqrt，求一个非负数的平方根，至少精确到小数点后3位">
+  let number = Number(prompt("please enter a number."));
+  for (let i=1; i<number; i+=0.001) {
+    if (number-(i**2) < 0.000001) {
+      console.log(i);
+      break;
+    }
+  }
+</script>
