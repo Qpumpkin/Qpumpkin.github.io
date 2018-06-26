@@ -192,9 +192,31 @@ for (let i=100; i<=100000; i++) {
   }
 </script>
 <script id="weekday" sample-input="2018 6" sample-output="5" comment="输入年份与月份，给出该年该月的第一天是星期几">
-  let year = Number(prompt("please enter a number."));
-  let month = Number(prompt("please enter a number of month"));
-
+  let year = Number(prompt("please enter the number of year."));
+  let month = Number(prompt("please enter the number of month."));
+  let difY = year - 2000;
+  let difD = difY * 365 + parseInt(difY/4) + difY?1:0;
+  //2000 1 → 6
+  //2001 1 → (6+366%7(2))%7 → 1
+  //2002 1 → (6+(366+365)%7(3))%7 → 2
+  for (let i=1; i<month; i++) {
+    switch (i) {
+      case 1: case 3: case 5: case 7: case 8: case 10:
+        difD += 31;
+        break;
+      case 4: case 6: case 9: case 11:
+        difD += 30;
+        break;
+      case ( (i==2 && difY%4!=0) ? 2 : -1 ):
+        difD += 28;
+        break;
+      case ( (i==2 && difY%4==0) ? 2 : -1 ):
+        difD += 29;
+        break;
+    }
+  }
+  let whatDay = (6+difD%7)%7 || "sunday";
+  console.log(whatDay);
 </script>
 <script id="complete-number" sample-input="6" sample-output="YES" comment="判断一个数是否为完全数">
   let number = Number(prompt("please enter a number."));
