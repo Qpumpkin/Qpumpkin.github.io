@@ -1,7 +1,7 @@
 var qpumpkin = {
   chunk:
   function chunk(array,size=1) {
-    let subSize = 0;
+    let subSize = 1;
     let subArr = [];
     let res = [];
 
@@ -11,7 +11,7 @@ var qpumpkin = {
       if (subSize === size) {
         res.push(subArr);
         subArr = [];
-        subSize = 0;
+        subSize = 1;
       } else {
         subSize += 1;
       }
