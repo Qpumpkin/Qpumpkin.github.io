@@ -57,17 +57,21 @@ var qpumpkin = {
     }
   },
   difference:
-  function difference(array,values) {
-    let res = [];
-    let map = new Set();
+  function difference(array,...values) {
+    let ref = [];
     for (let value of values) {
-      !map.has(value) && map.add(value);
+      ref.push(...value);
     }
-
+    let refTable = new Set();
+    for (let unit of ref) {
+      refTable.has(unit) || refTable.add(unit);
+    }
+    
+    let res = [];
     let cur;
     for (let i=0; i<array.length; i++) {
       cur = array[i];
-      !map.has(cur) && res.push(cur);
+      refTable.has(cur) || res.push(cur);
     }
     return res;
   },
