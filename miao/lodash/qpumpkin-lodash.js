@@ -59,14 +59,17 @@ var qpumpkin = {
   difference:
   function difference(array,...values) {
     let ref = [];
-    for (let value of values) {
-      ref.push(...value);
-    }
+    values.forEach(
+      value => ref.push(...value)
+    );
+
     let refTable = new Set();
-    for (let unit of ref) {
-      refTable.has(unit) || refTable.add(unit);
-    }
-    
+    ref.forEach(
+      unit => {
+        refTable.has(unit) || refTable.add(unit);
+      }
+    );
+
     let res = [];
     let cur;
     for (let i=0; i<array.length; i++) {
@@ -74,5 +77,38 @@ var qpumpkin = {
       refTable.has(cur) || res.push(cur);
     }
     return res;
+  },
+  differenceBy:
+  function differenceBy(array,...values) {
+    let compare = values.pop();
+    let ref = [];
+    for (let value of values) {
+      ref.push(...value);
+    }
+
+    let refTable = new Set();
+    ref.forEach(
+      element => {
+        let criterion = criterionProduce(element,compare);
+        refTable.has(criterion) || refTable.add(criterion);
+      }
+    );
+    let res = [];
+    array.forEach(
+      element => {
+        let criterion = criterionProduce(element, compare);
+        refTable.has(criterion) || res.push(element);
+      }
+    );
+
+    return res;
+
+    function criterionProduce(data,comp) {
+      if (comp instanceof Function) {
+        return comp(data);
+      } else {
+        return data[comp];
+      }
+    }
   },
 }
