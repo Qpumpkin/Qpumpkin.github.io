@@ -16,7 +16,7 @@ var qpumpkin = {
         subSize += 1;
       }
     }
-    subArr.length>0 && res.push(subArr);
+    subSize>0 && res.push(subArr);
 
     return res;
   },
@@ -70,22 +70,20 @@ var qpumpkin = {
       }
     );
 
-    let res = [];
-    let cur;
-    for (let i=0; i<array.length; i++) {
-      cur = array[i];
-      refTable.has(cur) || res.push(cur);
-    }
+    let res = array.filter(
+      element => !refTable.has(element)
+    );
     return res;
   },
   differenceBy:
-  function differenceBy(array,...values) {
-    let compare = values.pop();
+  function differenceBy(array,...rest) {
+    let last = rest.length - 1;
     let ref = [];
-    for (let value of values) {
-      ref.push(...value);
+    for (let i=0; i<last; i++) {
+      ref.push(...rest[i]);
     }
-
+    
+    let compare = rest[last];
     let refTable = new Set();
     ref.forEach(
       element => {
@@ -93,15 +91,14 @@ var qpumpkin = {
         refTable.has(criterion) || refTable.add(criterion);
       }
     );
-    let res = [];
-    array.forEach(
+
+    let out = array.filter(
       element => {
         let criterion = criterionProduce(element, compare);
-        refTable.has(criterion) || res.push(element);
+        return !refTable.has(criterion);
       }
     );
-
-    return res;
+    return out;
 
     function criterionProduce(data,comp) {
       if (comp instanceof Function) {
@@ -111,4 +108,96 @@ var qpumpkin = {
       }
     }
   },
-}
+  differenceWith:
+  function differenceWith(arr,otArr,comp) {
+    let [ref] = otArr;
+
+    let out = arr.filter(
+      element => comp(element,ref)
+    );
+    return out;
+  },
+  drop:
+  function drop(array,n=1) {
+    let out = [];
+    for (let i=n; i<array.length; i++) {
+      out.push(array[i]);
+    }
+    return out;
+  },
+  dropRight:
+  function dropRight(array,n=1) {
+    let len = array.length;
+    if (n >= len) {
+      return [];
+    } else {
+      let outL = len - n;
+      let out = [];
+      for (let i=0; i<outL; i++) {
+        out.push(array[i]);
+      }
+
+      return out;
+    }
+  },
+  dropRightWhile:
+  function dropRightWhile(array,condition) {
+    
+    condition = judge(condition);
+
+    let outLen;
+    for (let i=array.length-1; i>=0; i--) {
+      if (!condition(array[i])) {
+        outLen = i+1;
+        break;
+      }
+    }
+    let out = [];
+    for (let i=0; i<outLen; i++) {
+      out.push(array[i]);
+    }
+    return out;
+
+    function judge(condition) {
+      if (condition instanceof Function) {
+        
+        return condition;
+
+      } else if (condition instanceof Array) {
+        
+        let match =  (input) => {
+          let comp = input[condition[0]];
+          return comp === condition[1];
+        };
+        return match;
+
+      } else if (condition instanceof Object) {
+        
+        let match = (input) => {
+          for (let property in condition) {
+            if (input[property] !== condition[property]) {
+              return false;
+            }
+          }
+          return true;
+        }
+        return match;
+
+      } else {
+
+        let match = (input) => input[condition];
+        return match;
+
+      }
+    }
+  },
+};
+// var users = [
+//   { 'user': 'barney', 'active': true },
+//   { 'user': 'fred', 'active': false },
+//   { 'user': 'pebbles', 'active': false }
+// ];
+// console.log(
+//   qpumpkin.dropRightWhile(
+//     users, "active")
+// );
