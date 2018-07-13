@@ -190,11 +190,11 @@ var qpumpkin = {
     }
   },
 };
-var users = [
-  { 'user': 'barney', 'active': true },
-  { 'user': 'fred', 'active': false },
-  { 'user': 'pebbles', 'active': false }
-];
+// var users = [
+//   { 'user': 'barney', 'active': true },
+//   { 'user': 'fred', 'active': false },
+//   { 'user': 'pebbles', 'active': false }
+// ];
 // console.log(
 //   qpumpkin.chunk(
 //     ["a","b","c","d","d"], )
