@@ -1,19 +1,17 @@
 var qpumpkin = {
   chunk:
   function chunk(array,size=1) {
-    let subSize = 1;
+    let subSize = 0;
     let subArr = [];
     let res = [];
 
     for (let i=0; i<array.length; i++) {
       subArr.push(array[i]);
-
+      subSize += 1;
       if (subSize === size) {
         res.push(subArr);
         subArr = [];
-        subSize = 1;
-      } else {
-        subSize += 1;
+        subSize = 0;
       }
     }
     subSize>0 && res.push(subArr);
@@ -192,12 +190,12 @@ var qpumpkin = {
     }
   },
 };
-// var users = [
-//   { 'user': 'barney', 'active': true },
-//   { 'user': 'fred', 'active': false },
-//   { 'user': 'pebbles', 'active': false }
-// ];
+var users = [
+  { 'user': 'barney', 'active': true },
+  { 'user': 'fred', 'active': false },
+  { 'user': 'pebbles', 'active': false }
+];
 // console.log(
-//   qpumpkin.dropRightWhile(
-//     users, "active")
+//   qpumpkin.chunk(
+//     ["a","b","c","d","d"], )
 // );
