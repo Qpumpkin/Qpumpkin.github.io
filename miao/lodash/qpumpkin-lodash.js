@@ -41,18 +41,22 @@ var qpumpkin = {
     return out;
   },
   differenceBy:
-  function differenceBy(array,values,predicate) {
-    predicate = this.iteratee(predicate);
-    let map = createMap(values,predicate);
-    map
-    let out = array.filter(
-      function (element) {
-        let criterion = predicate(element);
-        return !map.has(criterion);
-      }
-    );
-
-    return out;
+  function differenceBy(array,...other) {
+    let argLen = arguments.length;
+    if (arguments[argLen-1] instanceof Array) {
+      return this.difference(array,...other);
+    } else {
+      let predicate = this.iteratee(other.pop());
+      let map = createMap(other,predicate);
+      let out = array.filter(
+        function (element) {
+          let criterion = predicate(element);
+          return !map.has(criterion);
+        }
+      );
+  
+      return out;
+    }
   },
   differenceWith:
   function differenceWith(arr,otArr,comp) {
@@ -96,7 +100,7 @@ var qpumpkin = {
   },
   dropRightWhile:
   function dropRightWhile(array,predicate) {
-    predicate = iteratee(predicate);
+    predicate = this.iteratee(predicate);
 
     let outLen;
     for (let i=array.length-1; i>=0; i--) {
@@ -212,7 +216,8 @@ var qpumpkin = {
     if (array.length === 0) {
       return -1;
     } else {
-      fromIndex = ensureNum(fromIndex);
+      fromIndex = ensureNum(fromIndex,0);
+      fromIndex
       for (let i=fromIndex; i<array.length; i++) {
         if (array[i] == value) {
           if (typeof array[i] == typeof value) {
@@ -327,9 +332,11 @@ var qpumpkin = {
   },
   nth:
   function nth(array,n=0) {
-    n = ensureNum(n,0,array.length);
-
-    return array[n];
+    if (n < 0) {
+      return array[array.length + n];
+    } else {
+      return array[n];
+    }
   },
   pull:
   function pull(array,...values) {
@@ -392,14 +399,17 @@ var qpumpkin = {
   function pullAt(array,indexes) {
     let map = createMap(indexes);
     let index = 0;
+    let pulled = [];
     for (let i=0; i<array.length; i++) {
       if (!map.has(i)) {
         array[index] = array[i];
         index += 1;
+      } else {
+        pulled.push(array[i]);
       }
     }
     array.length = index;
-    return array;
+    return pulled;
   },
   reverse:
   function reverse(array) {
@@ -425,14 +435,14 @@ var qpumpkin = {
       if (vKeys.length != oKeys.length) {
         return false;
       } else {
-        let curKey;
         for (let i=0; i<vKeys.length; i++) {
-          if (vKeys[i] !== oKeys[i]) {
+          let cur = vKeys[i];
+          if (!oKeys.includes(cur)) {
             return false;
           }
         }
         for (let i=0; i<vKeys.length; i++) {
-          curKey = vKeys[i];
+          let curKey = vKeys[i];
           if (value[curKey] !== other[curKey]) {
             if (!isEqual(value[curKey],other[curKey])) {
               return false;
@@ -579,14 +589,14 @@ var qpumpkin = {
       accumulator = accumulator==undefined ? collection[0] : accumulator;
       for (let i=0; i<collection.length; i++) {
         let cur = collection[i];
-        accumulator = func(cur,i,collection);
+        accumulator = func(accumulator,cur,i,collection);
       }
       return accumulator;
     } else if (collection instanceof Object) {
       accumulator = accumulator==undefined ? {} : accumulator;
       for (let key of collection) {
         let cur = collection[key];
-        accumulator = func(cur,key,collection);
+        accumulator = func(accumulator,cur,key,collection);
       }
       return accumulator;
     }
@@ -662,9 +672,10 @@ console.log(qpumpkin.reverse([1,2,3]));
 console.log(qpumpkin.pull(['a', 'b', 'c', 'a', 'b', 'c'],'a','c'));
 console.log(qpumpkin.pullAll(['a', 'b', 'c', 'a', 'b', 'c'], ['a', 'c']))
 console.log(qpumpkin.pullAllBy([{'x':1},{'x':2},{'x':3},{'x':1}],[{ 'x': 1 }, { 'x': 3 }], 'x'));
+console.log(qpumpkin.pullAt(['a', 'b', 'c', 'd'],[1,3]))
 // console.log(qpumpkin.last([1,2,3,4]));
 // console.log(qpumpkin.join(['a', 'b', 'c'], '~'));
-// console.log(qpumpkin.indexOf([1,2,1,2],2))
+console.log(qpumpkin.indexOf([1, 2, 1, 2], 2, -12))
 // console.log(qpumpkin.intersection([2,1],[2,3]))
 // console.log(qpumpkin.intersectionBy([{'x':1}], [{'x':2},{'x':1}],'x'));
 // console.log(qpumpkin.fromPairs([['a', 1],['b', 2]]))
@@ -684,10 +695,12 @@ var users = [
 // console.log(qpumpkin.findIndex(
 //   [{"user":"barney","active":false},{"user":"fred","active":false},{"user":"pebbles","active":true}],
 //   function(o) { return  o.user  ==  'barney';}));
-console.log(qpumpkin.dropWhile(users, ['user', 'barney',"active", true]));
+console.log(qpumpkin.dropRightWhile([{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}],"active"));
 // console.log(qpumpkin.difference([2,1,3,4,5],[2,3],[2,3,4,5]));
+console.log(qpumpkin.differenceBy([1, 2, 3, 4], [1, 3], [4]))
 // console.log(qpumpkin.fill([1,2,3], 'a',0,-1));
 
 // console.log(
 //   qpumpkin.differenceBy([{'x':2,'y':2},{'x':1,'y':3},{'x':3,"y":3}], [{'x':1,'y':2}], 'x')
 // );
+console.log(qpumpkin.nth(["a", "b", "c", "d"], 1))
