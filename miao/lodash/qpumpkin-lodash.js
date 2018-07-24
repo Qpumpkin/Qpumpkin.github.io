@@ -47,6 +47,7 @@ var qpumpkin = {
       return this.difference(array,...other);
     } else {
       let predicate = this.iteratee(other.pop());
+      other = this.flatten(other);
       let map = createMap(other,predicate);
       let out = array.filter(
         function (element) {
@@ -424,6 +425,114 @@ var qpumpkin = {
     }
     return array;
   },
+  slice:
+  function slice(array,start=0,end=array.length) {
+    start = ensureNum(start,0,array.length);
+    end = ensureNum(end,array.length,array.length);
+    let newArr = [];
+    for (let index in array) {
+      if (index>=start && index<end) {
+        newArr.push(array[index]);
+      }
+    }
+    return newArr;
+  },
+  sortedIndex:
+  function sortedIndex(array,value) {
+    let begin = 0;
+    let end = array.length;
+    while (begin < end-1) {
+      let mid = (begin+end) >> 1;
+      if (array[mid] < value) {
+        begin = mid;
+      } else {
+        end = mid;
+      }
+    }
+    return array[begin]>=value ? begin : end;
+  },
+  sortedIndexBy:
+  function sortedIndexBy(array,value,convertor) {
+    convertor = this.iteratee(convertor);
+    value = convertor(value);
+    let begin = 0;
+    let end = array.length;
+    while (begin < end-1) {
+      let mid = (begin+end) >> 1;
+      let cur = convertor(array[mid]);
+      if (cur < value) {
+        begin = mid;
+      } else {
+        end = mid;
+      }
+    }
+    return convertor(array[begin])>=value ? begin : end;
+  },
+  sortedIndexOf:
+  function sortedIndexOf(array,value) {
+    let begin = 0;
+    let end = array.length;
+    while (begin < end-1) {
+      let mid = (begin+end) >> 1;
+      if (array[mid] < value) {
+        begin = mid;
+      } else {
+        end = mid;
+      }
+    }
+    if (array[begin] == value) {
+      return begin;
+    } else if (array[end] == value) {
+      return end;
+    } else {
+      return -1;
+    }
+  },
+  sortedLastIndex:
+  function sortedLastIndex() {
+    let begin = 0;
+    let end = array.length;
+    while (begin < end - 1) {
+      let mid = (begin + end) >> 1;
+      if (array[mid] > value) {
+        end = mid;
+      } else {
+        begin = mid;
+      }
+    }
+    return begin+1;
+  },
+  sortedLastIndexBy:
+  function sortedLastIndexBy(array,value,convertor) {
+    convertor = this.iteratee(convertor);
+    value = convertor(value);
+    let begin = 0;
+    let end = array.length;
+    while (begin < end-1) {
+      let mid = (begin+end) >> 1;
+      let cur = convertor(array[mid]);
+      if (cur > value) {
+        end = mid;
+      } else {
+        begin = mid;
+      }
+    }
+    return begin+1;
+  },
+  sortedLastIndexOf:
+  function sortedLastIndexOf(array,value) {
+    let begin = 0;
+    let end = array.length;
+    while (begin < end - 1) {
+      let mid = (begin + end) >> 1;
+      if (array[mid] > value) {
+        end = mid;
+      } else {
+        begin = mid;
+      }
+    }
+    return array[begin]==value ? begin : -1;
+  },
   isEqual:
   function isEqual(value,other) {
     if (value === other) {
@@ -435,12 +544,6 @@ var qpumpkin = {
       if (vKeys.length != oKeys.length) {
         return false;
       } else {
-        for (let i=0; i<vKeys.length; i++) {
-          let cur = vKeys[i];
-          if (!oKeys.includes(cur)) {
-            return false;
-          }
-        }
         for (let i=0; i<vKeys.length; i++) {
           let curKey = vKeys[i];
           if (value[curKey] !== other[curKey]) {
@@ -632,8 +735,6 @@ var qpumpkin = {
   },
 };
 
-
-
 function sliceArray(array,begin=0,end=array.length,step=1) {
   let out = []
   begin = ensureNum(begin,0,array.length);
@@ -654,6 +755,7 @@ function createMap(values,convertor) {
 }
 
 function ensureNum(value,initial,backward) {
+  value = Number(value);
   if (isNaN(value)) {
     return initial;
   } else if (value < 0) {
@@ -667,7 +769,7 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
-
+console.log(qpumpkin.sortedIndex([1, 2, 2, 2, 2, 2, 6], 2))
 console.log(qpumpkin.reverse([1,2,3]));
 console.log(qpumpkin.pull(['a', 'b', 'c', 'a', 'b', 'c'],'a','c'));
 console.log(qpumpkin.pullAll(['a', 'b', 'c', 'a', 'b', 'c'], ['a', 'c']))
