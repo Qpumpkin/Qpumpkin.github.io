@@ -489,7 +489,7 @@ var qpumpkin = {
     }
   },
   sortedLastIndex:
-  function sortedLastIndex() {
+  function sortedLastIndex(array,value) {
     let begin = 0;
     let end = array.length;
     while (begin < end - 1) {
@@ -500,7 +500,7 @@ var qpumpkin = {
         begin = mid;
       }
     }
-    return begin+1;
+    return end;
   },
   sortedLastIndexBy:
   function sortedLastIndexBy(array,value,convertor) {
@@ -517,7 +517,7 @@ var qpumpkin = {
         begin = mid;
       }
     }
-    return begin+1;
+    return end;
   },
   sortedLastIndexOf:
   function sortedLastIndexOf(array,value) {
