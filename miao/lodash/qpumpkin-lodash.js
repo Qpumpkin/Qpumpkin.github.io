@@ -533,6 +533,130 @@ var qpumpkin = {
     }
     return array[begin]==value ? begin : -1;
   },
+  sortedUniq:
+  function sortedUniq(array) {
+    let comp = array[0];
+    let result = [];
+    for (let i=1; i<array.length; i++) {
+      if ((comp^array[i]) != 0) {
+        result.push(array[i]);
+        comp = array[i];
+      }
+    }
+    return result;
+  },
+  sortedUniqBy:
+  function sortedUniqBy(array,comparator) {
+    let comp = comparator(array[0]);
+    let result = [];
+    for (let i=1; i<array.length; i++) {
+      let cur = comparator(array[i]);
+      if ((comp^cur) !=0 ) {
+        result.push(array[i]);
+        comp = comparator(array[i]);
+      }
+    }
+    return result;
+  },
+  tail:
+  function tail(array) {
+    return array.slice(1);
+  },
+  take:
+  function take(array,n=1) {
+    return array.slice(0,n);
+  },
+  takeRight:
+  function takeRight(array,n=1) {
+    n = n>array.length ? 0 : n;
+    return array.slice(array.length-n);
+  },
+  takeRightWhile:
+  function takeRightWhile(array,predicate){
+    predicate = this.iteratee(predicate);
+    for (let i=array.length-1; i>=0; i--) {
+      if (!predicate(array[i],i,array)) {
+        return array.slice(i+1);
+      }
+    }
+    return array.slice();
+  },
+  takeWhile:
+  function takeWhile(array,predicate) {
+    predicate = this.iteratee(predicate);
+    for (let i=0; i<array.length; i++) {
+      if (!predicate(array[i],i,array)) {
+        return array.slice(0,i);
+      }
+    }
+    return array.slice();
+  },
+  union:
+  function union(arrays) {
+    arrays = Array.concat(...arrays);
+    return this.uniq(arrays);
+  },
+  unionBy:
+  function unionBy(...args) {
+    let predicate = args.pop();
+    return this.uniqBy(args,predicate);
+  },
+  unionWith:
+  function unionWith(...args) {
+    let comparator = args.pop();
+    return this.uniqWith(args,comparator);
+  },
+  uniq:
+  function uniq(array) {
+    return [...new Set(array)];
+  },
+  uniqBy:
+  function uniqBy(array,predicate) {
+    predicate = this.iteratee(predicate);
+    let map = new Set();
+    let result = array.filter(
+      function (element) {
+        let convert = predicate(element);
+        if (map.has(convert)) {
+          return false;
+        } else {
+          map.add(convert);
+          return true;
+        }
+      }
+    );
+    return result;
+  },
+  uniqWith:
+  function uniqWith(array,comparator) {
+    let result = array.reduce(
+      function (acc,cur) {
+        for (let obj of acc) {
+          if (comparator(obj,cur)) {
+            return acc;
+          }
+        }
+        acc.push(cur);
+        return acc;
+      },[]);
+      return result;
+  },
+  zip:
+  function zip() {
+
+  },
+  unzip:
+  function unzip(arrays) {
+    let unit1 = [];
+    let unit2 = [];
+    arrays.forEach(
+      function (element) {
+        unit1.push(element[0]);
+        unit2.push(element[1]);
+      }
+    );
+    return [unit1,unit2];
+  },
   isEqual:
   function isEqual(value,other) {
     if (value === other) {
@@ -590,7 +714,7 @@ var qpumpkin = {
       return function(object) {
         let predicate;
         let end = value.length - 1;
-        for(let i=0; i<end; i+=2) {//issue reason: i only add 1 in each loop, so it caused the key and value is not matched.
+        for(let i=0; i<end; i+=2) {//issue reason: I only add 1 in each loop, so it caused the key and value is not matched.
           predicate = this.matchesProperty(value[i],value[i+1]);
           if (!predicate(object)) {
             return false;
