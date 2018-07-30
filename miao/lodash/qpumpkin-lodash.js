@@ -641,12 +641,56 @@ var qpumpkin = {
       },[]);
       return result;
   },
-  zip:
-  function zip() {
-
-  },
   unzip:
   function unzip(arrays) {
+    let unit1 = arrays[0];
+    let unit2 = arrays[1];
+    let result = [];
+    unit1.forEach(
+      function (_,index) {
+        let group = [];
+        group.push(unit1[index],unit2[index]);
+        result.push(group);
+      }
+    );
+    return result;
+  },
+  unzipWith:
+  function unzipWith(array,unZipper) {
+    let unit1 = arrays[0];
+    let unit2 = arrays[1];
+    let result = [];
+    unit1.forEach(
+      function (_,index) {
+        let value = unZipper(unit1[index],unit2[index]);
+        result.push(value);
+      }
+    );
+    return result;
+  },
+  without:
+  function without(array,...values) {
+    let map = new Set(values);
+    return array.filter( element => !map.has(element));
+  },
+  xor:
+  function xor(arrays) {
+    arrays = this.flatten(arrays);
+    let map = new Set();
+    let multi = arrays.filter(
+      function (element) {
+        if (map.has(element)) {
+          return true;
+        } else {
+          map.add(element);
+        }
+      }
+    );
+    let tMap = new Set(multi);
+    return arrays.filter( element => !tMap.has(element));
+  },
+  zip:
+  function zip() {
     let unit1 = [];
     let unit2 = [];
     arrays.forEach(
@@ -655,7 +699,7 @@ var qpumpkin = {
         unit2.push(element[1]);
       }
     );
-    return [unit1,unit2];
+    return [unit1, unit2];
   },
   isEqual:
   function isEqual(value,other) {
