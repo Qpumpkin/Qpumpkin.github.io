@@ -548,7 +548,7 @@ var qpumpkin = {
     let result = [];
     for (let i=0; i<array.length; i++) {
       let cur = comparator(array[i]);
-      let comp = comparator(array[i+1]);
+      let comp = comparator(array[i-1]);
       if (cur != comp) {
         result.push(array[i]);
       }
@@ -596,11 +596,12 @@ var qpumpkin = {
   unionBy:
   function unionBy(...args) {
     let predicate = args.pop();
+    args = this.flatten(args);
     return this.uniqBy(args,predicate);
   },
   unionWith:
   function unionWith(...args) {
-    let comparator = args.pop();
+    let comparator = this.iteratee(args.pop());
     return this.uniqWith(args,comparator);
   },
   uniq:
