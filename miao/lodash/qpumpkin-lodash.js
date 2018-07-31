@@ -740,17 +740,37 @@ var qpumpkin = {
   zipObjectDeep:
   function zipObjectDeep(props,values) {
     let result = {};
-    props.forEach(function (element,index) {
-      element = element.split(".");
-      element.forEach(function (unit) {
-        if (unit.indexOf("[") == -1) {
-          
+    props.reduce(function(acc,element,index) {
+      let atrSet = element.split(".");
+      let obj = acc;
+      atrSet.forEach(function (atr,atrIndex) {
+        if (atrIndex == atrSet.length-1) {
+          analysis(obj,atr,values[index]);
         } else {
-          
+          obj = analysis(obj,atr);
+        }});
+      return acc;
+    },result);
+    return result;
+
+    function analysis(obj,path,value={}) {
+      if (path.indexOf("[") == -1) {
+        if (obj[path] == undefined) {
+          obj[path] = value;
         }
-      });
-    });
-    
+        return obj[path];
+      } else {
+        let atrName = path.slice(0,path.indexOf("["));
+        if (obj[atrName] == undefined) {
+          obj[atrName] = [];
+        }
+        let index = path.slice(path.indexOf("[")+1,path.indexOf("]"));
+        if (obj[atrName][index] == undefined) {
+          obj[atrName][index] = value;
+        }
+        return obj[atrName][index];
+      }
+    }
   },
   isEqual:
   function isEqual(value,other) {
@@ -987,7 +1007,7 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
-
+// console.log(qpumpkin.zipObjectDeep(['a.b[0].c', 'a.b[1].d'], [1, 2]).a);
 // console.log(qpumpkin.xorBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x'));
 // console.log(qpumpkin.zip(["a", "b"], [1, 2], [true, false]));
 // console.log(qpumpkin.xor([1, 2, 3, 4], [2, 3, 4, 5], [2, 4, 5, 6, 7], [5, 6, 7, 8]));
