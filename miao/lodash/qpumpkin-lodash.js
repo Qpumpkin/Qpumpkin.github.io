@@ -535,25 +535,22 @@ var qpumpkin = {
   },
   sortedUniq:
   function sortedUniq(array) {
-    let comp = array[0];
     let result = [];
-    for (let i=1; i<array.length; i++) {
-      if ((comp^array[i]) != 0) {
+    for (let i=0; i<array.length; i++) {
+      if (array[i] != array[i+1]) {
         result.push(array[i]);
-        comp = array[i];
       }
     }
     return result;
   },
   sortedUniqBy:
   function sortedUniqBy(array,comparator) {
-    let comp = comparator(array[0]);
     let result = [];
-    for (let i=1; i<array.length; i++) {
+    for (let i=0; i<array.length; i++) {
       let cur = comparator(array[i]);
-      if ((comp^cur) !=0 ) {
+      let comp = comparator(array[i+1]);
+      if (cur != comp) {
         result.push(array[i]);
-        comp = comparator(array[i]);
       }
     }
     return result;
@@ -568,8 +565,8 @@ var qpumpkin = {
   },
   takeRight:
   function takeRight(array,n=1) {
-    n = n>array.length ? 0 : n;
-    return array.slice(array.length-n);
+    n = array.length-n>0 ? array.length-n : 0
+    return array.slice(n);
   },
   takeRightWhile:
   function takeRightWhile(array,predicate){
@@ -592,7 +589,7 @@ var qpumpkin = {
     return array.slice();
   },
   union:
-  function union(arrays) {
+  function union(...arrays) {
     arrays = Array.concat(...arrays);
     return this.uniq(arrays);
   },
@@ -657,8 +654,8 @@ var qpumpkin = {
   },
   unzipWith:
   function unzipWith(array,unZipper) {
-    let unit1 = arrays[0];
-    let unit2 = arrays[1];
+    let unit1 = array[0];
+    let unit2 = array[1];
     let result = [];
     unit1.forEach(
       function (_,index) {
