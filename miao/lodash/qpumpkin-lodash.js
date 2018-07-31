@@ -602,6 +602,7 @@ var qpumpkin = {
   unionWith:
   function unionWith(...args) {
     let comparator = this.iteratee(args.pop());
+    args = this.flatten(args);
     return this.uniqWith(args,comparator);
   },
   uniq:
@@ -672,7 +673,7 @@ var qpumpkin = {
     return array.filter( element => !map.has(element));
   },
   xor:
-  function xor(arrays) {
+  function xor(...arrays) {
     arrays = this.flatten(arrays);
     let map = new Set();
     let multi = arrays.filter(
@@ -681,23 +682,75 @@ var qpumpkin = {
           return true;
         } else {
           map.add(element);
+          return false;
         }
       }
     );
     let tMap = new Set(multi);
     return arrays.filter( element => !tMap.has(element));
   },
+  xorBy:
+  function xorBy(...args) {
+    let predicate = this.iteratee(args.pop());
+    args = this.flatten(args);
+    let map = new Set();
+    let multi = new Set();
+    args.forEach(function (element) {
+        let convert = predicate(element);
+        if (map.has(convert)) {
+          multi.add(convert);
+        } else {
+          map.add(convert);
+        }
+      });
+    
+    return args.filter((element) => !multi.has(predicate(element)));
+  },
+  xorWith:
+  function xorWith(...args) {
+    let comparator = args.pop();
+    args = this.flatten(args);
+    let result = args.filter(function (element,index) {
+        for (let i=0; i<args.length; i++) {
+          let cur = args[i];
+          if (i!=index && comparator(element,cur)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    return result;
+  },
   zip:
-  function zip() {
+  function zip(...arrays) {
     let unit1 = [];
     let unit2 = [];
-    arrays.forEach(
-      function (element) {
+    arrays.forEach(function (element) {
         unit1.push(element[0]);
         unit2.push(element[1]);
-      }
-    );
+      });
     return [unit1, unit2];
+  },
+  zipObject:
+  function zipObject(props,values) {
+    let result = {};
+    props.forEach( (prop,index) => result[prop]=values[index] );
+    return result;
+  },
+  zipObjectDeep:
+  function zipObjectDeep(props,values) {
+    let result = {};
+    props.forEach(function (element,index) {
+      element = element.split(".");
+      element.forEach(function (unit) {
+        if (unit.indexOf("[") == -1) {
+          
+        } else {
+          
+        }
+      });
+    });
+    
   },
   isEqual:
   function isEqual(value,other) {
@@ -900,7 +953,6 @@ var qpumpkin = {
     }
   },
 };
-
 function sliceArray(array,begin=0,end=array.length,step=1) {
   let out = []
   begin = ensureNum(begin,0,array.length);
@@ -935,15 +987,19 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
-console.log(qpumpkin.sortedIndex([1, 2, 2, 2, 2, 2, 6], 2))
-console.log(qpumpkin.reverse([1,2,3]));
-console.log(qpumpkin.pull(['a', 'b', 'c', 'a', 'b', 'c'],'a','c'));
-console.log(qpumpkin.pullAll(['a', 'b', 'c', 'a', 'b', 'c'], ['a', 'c']))
-console.log(qpumpkin.pullAllBy([{'x':1},{'x':2},{'x':3},{'x':1}],[{ 'x': 1 }, { 'x': 3 }], 'x'));
-console.log(qpumpkin.pullAt(['a', 'b', 'c', 'd'],[1,3]))
+
+// console.log(qpumpkin.xorBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x'));
+// console.log(qpumpkin.zip(["a", "b"], [1, 2], [true, false]));
+// console.log(qpumpkin.xor([1, 2, 3, 4], [2, 3, 4, 5], [2, 4, 5, 6, 7], [5, 6, 7, 8]));
+// console.log(qpumpkin.sortedIndex([1, 2, 2, 2, 2, 2, 6], 2))
+// console.log(qpumpkin.reverse([1,2,3]));
+// console.log(qpumpkin.pull(['a', 'b', 'c', 'a', 'b', 'c'],'a','c'));
+// console.log(qpumpkin.pullAll(['a', 'b', 'c', 'a', 'b', 'c'], ['a', 'c']))
+// console.log(qpumpkin.pullAllBy([{'x':1},{'x':2},{'x':3},{'x':1}],[{ 'x': 1 }, { 'x': 3 }], 'x'));
+// console.log(qpumpkin.pullAt(['a', 'b', 'c', 'd'],[1,3]))
 // console.log(qpumpkin.last([1,2,3,4]));
 // console.log(qpumpkin.join(['a', 'b', 'c'], '~'));
-console.log(qpumpkin.indexOf([1, 2, 1, 2], 2, -12))
+// console.log(qpumpkin.indexOf([1, 2, 1, 2], 2, -12))
 // console.log(qpumpkin.intersection([2,1],[2,3]))
 // console.log(qpumpkin.intersectionBy([{'x':1}], [{'x':2},{'x':1}],'x'));
 // console.log(qpumpkin.fromPairs([['a', 1],['b', 2]]))
@@ -951,11 +1007,11 @@ console.log(qpumpkin.indexOf([1, 2, 1, 2], 2, -12))
 // console.log(qpumpkin.flattenDeep([1, [2, [3, [4]], 5]]))
 // console.log(qpumpkin.flatten([1, [2, [3, [4]], 5]]));
 // console.log(qpumpkin.isEqual({x:1,y:2,e:3},{x:1,y:2,e:3}))
-var users = [
-  { 'user': 'barney', 'active': true },
-  { 'user': 'fred', 'active': false },
-  { 'user': 'pebbles', 'active': false }
-];
+// var users = [
+//   { 'user': 'barney', 'active': true },
+//   { 'user': 'fred', 'active': false },
+//   { 'user': 'pebbles', 'active': false }
+// ];
 // console.log(qpumpkin.chunk([1,2,3,4,5,6,7,8,],3))
 // console.log(qpumpkin.findLastIndex(
 //   [{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}],
@@ -963,12 +1019,12 @@ var users = [
 // console.log(qpumpkin.findIndex(
 //   [{"user":"barney","active":false},{"user":"fred","active":false},{"user":"pebbles","active":true}],
 //   function(o) { return  o.user  ==  'barney';}));
-console.log(qpumpkin.dropRightWhile([{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}],"active"));
+// console.log(qpumpkin.dropRightWhile([{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}],"active"));
 // console.log(qpumpkin.difference([2,1,3,4,5],[2,3],[2,3,4,5]));
-console.log(qpumpkin.differenceBy([1, 2, 3, 4], [1, 3], [4]))
+// console.log(qpumpkin.differenceBy([1, 2, 3, 4], [1, 3], [4]))
 // console.log(qpumpkin.fill([1,2,3], 'a',0,-1));
 
 // console.log(
 //   qpumpkin.differenceBy([{'x':2,'y':2},{'x':1,'y':3},{'x':3,"y":3}], [{'x':1,'y':2}], 'x')
 // );
-console.log(qpumpkin.nth(["a", "b", "c", "d"], 1))
+// console.log(qpumpkin.nth(["a", "b", "c", "d"], 1))
