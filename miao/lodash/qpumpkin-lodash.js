@@ -772,6 +772,136 @@ var qpumpkin = {
       }
     }
   },
+  zipWith:
+  function zipWith(...args) {
+    let zipper = args.pop();
+    let first = [];
+    let second = [];
+    for (let i=0; i<args.length; i++) {
+      first.push(args[i][0]);
+      second.push(args[i][1]);
+    }
+    return [zipper(...first),zipper(...second)];
+  },
+  countBy:
+  function countBy(collection,counter) {
+    counter = this.iteratee(counter);
+    let result = {};
+    for (let key in collection) {
+      let genKey = counter(collection[key]);
+      if (result[genKey] == undefined) {
+        result[genKey] = 1;
+      } else {
+        result[genKey] += 1;
+      }
+    }
+    return result;
+  },
+  forEach:
+  function forEach(collection,operate) {
+    if (collection instanceof Array) {
+      for (let i=0; i<collection.length; i++) {
+        let cur = collection[i];
+        if (operate(cur,i,collection) == false) {
+          return collection;
+        }
+      }
+      return collection;
+    } else {
+      for (let key in collection) {
+        let cur = collection[key];
+        if (operate(cur,key,collection) == false) {
+          return collection;
+        }
+      }
+      return collection;
+    }
+  },
+  forEachRight:
+  function forEachRight(collection,operate) {
+    if (Array.isArray(collection)) {
+      for (let i=collection.length-1; i>=0; i--) {
+        operate(collection[i]);
+      }
+      return collection;
+    } else {
+      return this.forEach(collection,operate);
+    }
+  },
+  every:
+  function every(collection,predicate) {
+    let predicate = this.iteratee(predicate);
+    for (let k in collection) {
+      if (!predicate(collection[k])) {
+        return false;
+      }
+    }
+    return true;
+  },
+  filter:
+  function filter(collection,predicate) {
+    predicate = this.iteratee(predicate);
+    if (collection instanceof Array) {
+      let out = [];
+      for (let i=0; i<collection.length; i++) {
+        let cur = collection[i];
+        predicate(cur,i,collection) && out.push(cur);
+      }
+      return out;
+    } else if (collection instanceof Object) {
+      let out = {};
+      for (let key in collection) {
+        let cur = collection[key];
+        predicate(cur,key,collection) && (out[key]=cur);
+      }
+      return out;
+    }
+  },
+  find:
+  function find(collection,predicate,fromIndex=0) {
+    let end = collection.length;
+    predicate = this.iteratee(predicate);
+    if (Array.isArray(collection)) {
+      fromIndex |= 0;
+      if (fromIndex < 0) {
+        fromIndex = Math.abs(fromIndex)>end ? 0 : end+fromIndex;
+      }
+      for (let i = fromIndex; i < end; i++) {
+        if (predicate(collection[i])) {
+          return collection[i];
+        }
+      }
+      return undefined;
+    } else {
+      for (let key in collection) {
+        if (predicate(collection[key])) {
+          return collection[key];
+        }
+      }
+      return undefined;
+    }
+  },
+  findLast:
+  function findLast(collection,predicate,fromIndex=collection.length-1) {
+    let end = collection.length;
+    predicate = this.iteratee(predicate);
+    if (Array.isArray(collection)) {
+      fromIndex |= 0;
+      if (fromIndex < 0) {
+        fromIndex = end + fromIndex;
+      } else if (fromIndex > end) {
+        fromIndex = end;
+      }
+      for (let i=fromIndex; i>=0; i--) {
+        if (predicate(collection[i])) {
+          return collection[i];
+        }
+      }
+      return undefined;
+    } else {
+      return this.find(collection,predicate);
+    }
+  },
   isEqual:
   function isEqual(value,other) {
     if (value === other) {
@@ -886,45 +1016,6 @@ var qpumpkin = {
     array.length = saveIndex.length;
     return out;
   },
-  filter:
-  function filter(collection,predicate) {
-    predicate = this.iteratee(predicate);
-    if (collection instanceof Array) {
-      let out = [];
-      for (let i=0; i<collection.length; i++) {
-        let cur = collection[i];
-        predicate(cur,i,collection) && out.push(cur);
-      }
-      return out;
-    } else if (collection instanceof Object) {
-      let out = {};
-      for (let key in collection) {
-        let cur = collection[key];
-        predicate(cur,key,collection) && (out[key]=cur);
-      }
-      return out;
-    }
-  },
-  forEach:
-  function forEach(collection,operate) {
-    if (collection instanceof Array) {
-      for (let i=0; i<collection.length; i++) {
-        let cur = collection[i];
-        if (operate(cur,i,collection) == false) {
-          return collection;
-        }
-      }
-      return collection;
-    } else {
-      for (let key in collection) {
-        let cur = collection[key];
-        if (operate(cur,key,collection) == false) {
-          return collection;
-        }
-      }
-      return collection;
-    }
-  },
   reduce:
   function reduce(collection,func,accumulator) {
     if (collection instanceof Array) {
@@ -1007,6 +1098,11 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
+// console.log(qpumpkin.findLast([1, 2, 3, 4], function(n) {return n % 2 == 1;}))
+// console.log(qpumpkin.forEachRight([1, 2], function (value) {console.log(value)}));
+// console.log(qpumpkin.forEach({'a': 1,'b': 2},function (value, key) {console.log(value);}))
+// console.log(qpumpkin.countBy(['one', 'two', 'three'], 'length'))
+// console.log(qpumpkin.zipWith([1, 2], [10, 20], [100, 200], function (a, b, c) {return a + b + c;}))
 // console.log(qpumpkin.zipObjectDeep(['a.b[0].c', 'a.b[1].d'], [1, 2]).a);
 // console.log(qpumpkin.xorBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x'));
 // console.log(qpumpkin.zip(["a", "b"], [1, 2], [true, false]));
