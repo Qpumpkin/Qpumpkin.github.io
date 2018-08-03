@@ -955,11 +955,11 @@ var qpumpkin = {
       value = Object(value);
       let len = value.length;
       let end = collection.length - len;
-      for (let i=fromIndex; i<end; i++) {
+      for (let i=fromIndex; i<=end; i++) {
         let cur = collection[i];
         if (cur == value[0]) {
           let find = true;
-          for (let j=1; j<=len; j++) {
+          for (let j=1; j<len; j++) {
             if (collection[i+j] != value[j]) {
               find = false;
               break;
@@ -1123,36 +1123,10 @@ var qpumpkin = {
     array.length = saveIndex.length;
     return out;
   },
-  reduce:
-  function reduce(collection,func,accumulator) {
-    if (collection instanceof Array) {
-      let begin;
-      if (accumulator == undefined) {
-        begin = 1;
-        accumulator = collection[0];
-      } else {
-        begin = 0;
-      }
-      for (let i=begin; i<collection.length; i++) {
-        let cur = collection[i];
-        accumulator = func(accumulator,cur,i,collection);
-      }
-      return accumulator;
-    } else if (collection instanceof Object) {
-      if (accumulator == undefined) {
-        begin = 1;
-        accumulator = collection[0];
-      } else {
-        begin = 0;
-      }
-      let keys = Object.keys(collection) 
-      for (let i=begin; i<keys.length; i++) {
-        let cur = collection[key];
-        accumulator = func(accumulator,cur,key,collection);
-      }
-      return accumulator;
-    }
-  },
+  // reduce:
+  // function reduce(collection,func,accumulator) {
+
+  // },
 };
 function sliceArray(array,begin=0,end=array.length,step=1) {
   let out = []
@@ -1191,7 +1165,7 @@ function ensureNum(value,initial,backward) {
 // console.log(qpumpkin.map([1,2,3,4,5],function(v,i,o) {return (v+i)%2==0}))
 // console.log(qpumpkin.map([{"a":{"b":1}},{'a':{"b":2}}],"a.b"));
 // console.log(qpumpkin.reduce([1,2],(sum,n) => sum+n, 0));
-// console.log(qpumpkin.includes([1,2,3],1));
+// console.log(qpumpkin.includes('abcd', 'bc'));
 // console.log(qpumpkin.keyBy(
 //   [{'dir':'left','code':97},{'dir':'right','code':100}],
 //   function(o){return String.fromCharCode(o.code)}
