@@ -217,13 +217,10 @@ var qpumpkin = {
     if (array.length === 0) {
       return -1;
     } else {
-      fromIndex = ensureNum(fromIndex,0);
-      fromIndex
+      fromIndex = ensureNum(fromIndex,0,array.length);
       for (let i=fromIndex; i<array.length; i++) {
-        if (array[i] == value) {
-          if (typeof array[i] == typeof value) {
-            return i;
-          }
+        if (array[i] === value) {
+          return i;
         }
       }
       return -1;
@@ -906,6 +903,110 @@ var qpumpkin = {
   function flatMap(collection,iteratee) {
     return this.flatten(collection.map(ele => iteratee(ele)));
   },
+  flatMapDeep:
+  function flatMapDeep(collection,iteratee) {
+    return this.flattenDeep(collection.map( ele => iteratee(ele)));
+  },
+  flatMapDepth:
+  function flatMapDepth(collection,iteratee,depth=1) {
+    return this.flattenDepth(collection.map(ele => iteratee(ele)),depth);
+  },
+  groupBy:
+  function groupBy(collection,predicate) {
+    predicate = this.iteratee(predicate);
+    if (collection instanceof Array) {
+      let out = {};
+      for (let i = 0; i < collection.length; i++) {
+        let cur = collection[i];
+        let key = predicate(cur);
+        if (out[key] == undefined) {
+          out[key] = [cur];
+        } else {
+          out[key].push(cur);
+        }
+      }
+      return out;
+    } else {
+      let out = {};
+      for (let property in collection) {
+        let cur = collection[property];
+        let key = predicate(cur);
+        if (out[key] == undefined) {
+          out[key] = [cur];
+        } else {
+          out[key].push(cur);
+        }
+      }
+      return out;
+    }
+  },
+  includes:
+  function includes(collection,value,fromIndex=0) {
+    if (collection instanceof Object) {
+      collection = Object.values(collection);
+      if (this.indexOf(collection,value,fromIndex) == -1) {
+        return false;
+      } else {
+        return true;
+      }
+    } else if (typeof collection == 'string') {
+      collection = Object(collection);
+      fromIndex = ensureNum(fromIndex,0,collection.length);
+      value = Object(value);
+      let len = value.length;
+      let end = collection.length - len;
+      for (let i=fromIndex; i<end; i++) {
+        let cur = collection[i];
+        if (cur == value[0]) {
+          let find = true;
+          for (let j=1; j<len; j++) {
+            if (collection[i+j] != value[j]) {
+              find = false;
+              break;
+            }
+          }
+          if (find) {
+            return true;
+          }
+        }
+      }
+    }
+  },
+  invokeMap:
+  function invokeMap(collection,path,...args) {
+    if (typeof path == 'string') {
+      for (let key in collection) {
+        path = collection[key][path];
+        break;
+      }
+    }
+    if (typeof path != 'function') {
+      throw new TypeError('path is not function');
+    } else {
+      return collection.map(ele => path.apply(null,args));
+    }
+
+  },
+  keyBy:
+  function keyBy(collection,convertor) {
+    let result = {};
+    convertor = this.iteratee(convertor);
+    for (let item in collection) {
+      let key = convertor(collection[item]);
+      if (result[key] == undefined) {
+        result[key] = collection[item];
+      } else {
+        result[key] = [...result[key]].push(collection[item]);
+      }
+    }
+    return result;
+  },
+  map:
+  function map(collection,mapper) {
+    mapper = this.iteratee(mapper);
+    let keys = Object.keys(collection);
+    return keys.map( key => mapper(collection[key],key,collection));
+  },
   isEqual:
   function isEqual(value,other) {
     if (value === other) {
@@ -1038,35 +1139,6 @@ var qpumpkin = {
       return accumulator;
     }
   },
-  groupBy:
-  function groupBy(collection,predicate) {
-    predicate = this.iteratee(predicate);
-    if (collection instanceof Array) {
-      let out = {};
-      for (let i=0; i<collection.length; i++) {
-        let cur = collection[i];
-        let key = predicate(cur);
-        if (out[key] == undefined) {
-          out[key] = [cur];
-        } else {
-          out[key].push(cur);
-        }
-      }
-      return out;
-    } else {
-      let out = {};
-      for (let property in collection) {
-        let cur = collection[property];
-        let key = predicate(cur);
-        if (out[key] == undefined) {
-          out[key] = [cur];
-        } else {
-          out[key].push(cur);
-        }
-      }
-      return out;
-    }
-  },
 };
 function sliceArray(array,begin=0,end=array.length,step=1) {
   let out = []
@@ -1102,6 +1174,15 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
+
+// console.log(qpumpkin.map({'a':4,'b':8},n => n*n))
+// console.log(qpumpkin.includes([1,2,3],1));
+// console.log(qpumpkin.keyBy(
+//   [{'dir':'left','code':97},{'dir':'right','code':100}],
+//   function(o){return String.fromCharCode(o.code)}
+// ));
+// console.log(qpumpkin.flatMapDepth([1, 2], function (n) {return [[[n, n]]]},2));
+// console.log(qpumpkin.flatMapDeep([1, 2], function (n) {return [[n, n]]}))
 // console.log(qpumpkin.flatMap([1, 2], function (n){return [n, n];}))
 // console.log(qpumpkin.findLast([1, 2, 3, 4], function(n) {return n % 2 == 1;}))
 // console.log(qpumpkin.forEachRight([1, 2], function (value) {console.log(value)}));
@@ -1148,4 +1229,4 @@ function ensureNum(value,initial,backward) {
 // console.log(
 //   qpumpkin.differenceBy([{'x':2,'y':2},{'x':1,'y':3},{'x':3,"y":3}], [{'x':1,'y':2}], 'x')
 // );
-// console.log(qpumpkin.nth(["a", "b", "c", "d"], 1))
+// console.log(qpumpkin.nth(["a", "b", "c", "d"], 1));
