@@ -830,7 +830,7 @@ var qpumpkin = {
   },
   every:
   function every(collection,predicate) {
-    let predicate = this.iteratee(predicate);
+    predicate = this.iteratee(predicate);
     for (let k in collection) {
       if (!predicate(collection[k])) {
         return false;
@@ -1102,6 +1102,7 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
+// console.log(qpumpkin.flatMap([1, 2], function (n){return [n, n];}))
 // console.log(qpumpkin.findLast([1, 2, 3, 4], function(n) {return n % 2 == 1;}))
 // console.log(qpumpkin.forEachRight([1, 2], function (value) {console.log(value)}));
 // console.log(qpumpkin.forEach({'a': 1,'b': 2},function (value, key) {console.log(value);}))
