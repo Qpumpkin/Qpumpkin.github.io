@@ -6,25 +6,37 @@ class MySet {
       for (let i=0; i<values.length; i++) {
         this.add(values[i]);
       }
+      return ;
+    } else {
+      return ;
     }
   }
   add(value) {
-    if (this.has(value)) {
+    let save = value;
+    if (typeof value=='number' && value==value) {
+      save = "n" + cur;
+    }
+    if (this.has(save)) {
       return this.Entries;
     } else {
-      this.save[value] = true;
+      this.save[save] = true;
       this.Entries.push(value);
       return this.Entries;
     }
   }
   delete(value) {
-    if (value in this.save) {
-      delete this.save[value];
+    let save = value;
+    if (typeof value=='number' && value==value) {
+      save = "n" + value;
+    }
+    if (save in this.save) {
+      delete this.save[save];
       if (value != value) {
-        this.Entries = this.Entries.filter(ele => ele == ele);
+        this.Entries = this.Entries.filter(ele => ele === ele);
       } else {
-        this.Entries = this.Entries.filter(ele => !(ele == value));
+        this.Entries = this.Entries.filter(ele => !(ele === value));
       }
+      return true;
     } else {
       return false;
     }
@@ -33,7 +45,11 @@ class MySet {
     return this.Entries;
   }
   has(value) {
-    return value in this.save;
+    let save = value;
+    if (typeof value=='number' && value==value) {
+      save = "n" + value;
+    }
+    return save in this.save;
   }
   clear() {
     this.save = Object.create(null);
@@ -43,8 +59,8 @@ class MySet {
     return this.Entries.length;
   }
   forEach(func,thisArg=null) {  
-    let end = this.Entries.length;
     let keys = this.Entries;
+    let end = keys.length;
     for (let i=0; i<end; i++) {
       func.call(thisArg,keys[i]);
     }
@@ -63,28 +79,31 @@ class MyMap {
     }
   }
   set(key,value) {
-    if (key in this.save) {
-      this.save[key] = value;
-      let index = this.KeysIndex[key];
-      this.Entries[index][key] = value;
+    let save = key;
+    if (typeof save=='number' && save==save) {
+      save = 'n' + save;
+    }
+    if (save in this.save) {
+      this.save[save] = value;
+      let index = this.KeysIndex[save];
+      this.Entries[index][1] = value;
       return this.save;
     } else {
-      this.save[key] = value;
-      this.KeysIndex[key] = this.Entries.length;
-      this.Entries.push({[key]:value});
+      this.save[save] = value;
+      this.KeysIndex[save] = this.Entries.length;
+      this.Entries.push([key,value]);
       return this.save;
     }
   }
   delete(key) {
-    if (key in this.save) {
-      delete this.save[key];
-      let dIndex = this.KeysIndex[key];
-      let maps = this.Entries;
-      let end = this.Entries.length - 1;
-      for (let i=dIndex; i<end; i++) {
-        maps[i] = maps[i+1];
-      }
-      maps.pop();
+    let save = key;
+    if (typeof save=='number' && save==save) {
+      save = 'n' + save;
+    }
+    if (save in this.save) {
+      delete this.save[save];
+      let dIndex = this.KeysIndex[save];
+      this.Entries = this.Entries.filter( (_,i) => i!=dIndex);
       return true;
     } else {
       return false;
@@ -96,11 +115,19 @@ class MyMap {
     this.Entries = [];
   }
   has(key) {
-    return key in this.save;
+    let save = key;
+    if (typeof save=='number' && save==save) {
+      save = 'n' + save;
+    }
+    return save in this.save;
   }
   get(key) {
-    if (key in this.save) {
-      return this.save[key];
+    let save = key;
+    if (typeof save=='number' && save==save) {
+      save = 'n' + key;
+    }
+    if (save in this.save) {
+      return this.save[save];
     } else {
       return undefined;
     }
