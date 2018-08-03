@@ -603,17 +603,19 @@ class MyArray {
     return this.length;
   }
   get length() {
-    let length = 0;
+    let length = this._length;
     for (let index in this) {
       if (index > length) {
         length = index;
       }
     }
-    this._length = length + 1;
+    if (this._length <= length) {
+      this._length = length + 1;
+    }
     return this._length;
   }
   set length(val) {
-    if (val > this._length) {
+    if (val >= this._length) {
       this._length = val;
       return this._length;
     } else {

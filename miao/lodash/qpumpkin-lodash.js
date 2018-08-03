@@ -902,6 +902,10 @@ var qpumpkin = {
       return this.find(collection,predicate);
     }
   },
+  flatMap:
+  function flatMap(collection,iteratee) {
+    return this.flatten(collection.map(ele => iteratee(ele)));
+  },
   isEqual:
   function isEqual(value,other) {
     if (value === other) {
