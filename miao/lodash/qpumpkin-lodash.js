@@ -975,17 +975,9 @@ var qpumpkin = {
   invokeMap:
   function invokeMap(collection,path,...args) {
     if (typeof path == 'string') {
-      for (let key in collection) {
-        path = collection[key][path];
-        break;
-      }
+      path = collection[0][path];
     }
-    if (typeof path != 'function') {
-      throw new TypeError('path is not function');
-    } else {
-      return collection.map(ele => path.apply(null,args));
-    }
-
+    return collection.map(ele => path.apply(ele,args));
   },
   keyBy:
   function keyBy(collection,convertor) {
@@ -1004,7 +996,7 @@ var qpumpkin = {
   map:
   function map(collection,mapper) {
     mapper = this.iteratee(mapper);
-    let keys = Object.keys(collection);
+    let keys = Object.keys(collection).map( key => isNaN(key)?key:Number(key));
     return keys.map( key => mapper(collection[key],key,collection));
   },
   isEqual:
@@ -1124,8 +1116,14 @@ var qpumpkin = {
   reduce:
   function reduce(collection,func,accumulator) {
     if (collection instanceof Array) {
-      accumulator = accumulator==undefined ? collection[0] : accumulator;
-      for (let i=0; i<collection.length; i++) {
+      let begin;
+      if (accumulator == undefined) {
+        begin = 1;
+        accumulator = collection[0];
+      } else {
+        begin = 0;
+      }
+      for (let i=begin; i<collection.length; i++) {
         let cur = collection[i];
         accumulator = func(accumulator,cur,i,collection);
       }
@@ -1174,7 +1172,7 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
-
+console.log(qpumpkin.map([1,2,3,4,5],function(v,i,o) {return (v+i)%2==0}))
 // console.log(qpumpkin.map({'a':4,'b':8},n => n*n))
 // console.log(qpumpkin.includes([1,2,3],1));
 // console.log(qpumpkin.keyBy(
