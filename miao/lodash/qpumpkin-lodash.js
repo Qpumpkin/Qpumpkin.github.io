@@ -959,7 +959,7 @@ var qpumpkin = {
         let cur = collection[i];
         if (cur == value[0]) {
           let find = true;
-          for (let j=1; j<len; j++) {
+          for (let j=1; j<=len; j++) {
             if (collection[i+j] != value[j]) {
               find = false;
               break;
@@ -1068,7 +1068,17 @@ var qpumpkin = {
     } else if (value instanceof Object) {
       return object => this.isMatch(object,value);
     } else {
-      return object => object[value];
+      return object => {
+        if (value.includes('.')) {
+          let values = value.split(".");
+          for (let i=0; i<values.length; i++) {
+            object = object[values[i]];
+          }
+          return object;
+        } else {
+          return object[value];
+        }
+      };
     }
   },
   matchesProperty:
@@ -1129,8 +1139,14 @@ var qpumpkin = {
       }
       return accumulator;
     } else if (collection instanceof Object) {
-      accumulator = accumulator==undefined ? {} : accumulator;
-      for (let key of collection) {
+      if (accumulator == undefined) {
+        begin = 1;
+        accumulator = collection[0];
+      } else {
+        begin = 0;
+      }
+      let keys = Object.keys(collection) 
+      for (let i=begin; i<keys.length; i++) {
         let cur = collection[key];
         accumulator = func(accumulator,cur,key,collection);
       }
@@ -1172,8 +1188,9 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
-console.log(qpumpkin.map([1,2,3,4,5],function(v,i,o) {return (v+i)%2==0}))
-// console.log(qpumpkin.map({'a':4,'b':8},n => n*n))
+// console.log(qpumpkin.map([1,2,3,4,5],function(v,i,o) {return (v+i)%2==0}))
+// console.log(qpumpkin.map([{"a":{"b":1}},{'a':{"b":2}}],"a.b"));
+// console.log(qpumpkin.reduce([1,2],(sum,n) => sum+n, 0));
 // console.log(qpumpkin.includes([1,2,3],1));
 // console.log(qpumpkin.keyBy(
 //   [{'dir':'left','code':97},{'dir':'right','code':100}],
