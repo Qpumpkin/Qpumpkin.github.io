@@ -999,6 +999,37 @@ var qpumpkin = {
     let keys = Object.keys(collection).map( key => isNaN(key)?key:Number(key));
     return keys.map( key => mapper(collection[key],key,collection));
   },
+  // orderBy:
+  // function orderBy(collection,iteratees,orders) {
+  //   let iters = iteratees.map( iter => this.iteratee(iter));
+  //   for (let i=0; i<iters.length)
+  // },
+  partition:
+  function partition(collection,predicate) {
+    predicate = this.iteratee(predicate);
+    let result = [[],[]];
+    for (let i=0; i<collection.length; i++) {
+      let cur = collection[i];
+      if (predicate(cur)) {
+        result[0].push(cur);
+      } else {
+        result[1].push(cur);
+      }
+    }
+    return result;
+  },
+  reject:
+  function reject(collection,predicate) {
+    predicate = this.iteratee(predicate);
+    return collection.filter(function (ele,index,array) {
+      return !predicate(ele,index,array);
+    });
+  },
+  sample:
+  function sample(collection) {
+    let randIndex = Math.floor(Math.random() * collection.length);
+    return collection[randIndex];
+  },
   isEqual:
   function isEqual(value,other) {
     if (value === other) {
@@ -1162,6 +1193,12 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
+
+console.log(qpumpkin.reject(
+  [{'user': 'barney', 'age': 36, 'active': false },{ 'user': 'fred',   'age': 40, 'active': true }],function(o) { return !o.active; }))
+console.log(qpumpkin.partition(
+  [{'user':'barney','age':36,'active':false},{'user':'fred','age': 40,'active':true},{'user': 'pebbles','age': 1,'active':false}],
+function(o){ return o.active; }));
 // console.log(qpumpkin.map([1,2,3,4,5],function(v,i,o) {return (v+i)%2==0}))
 // console.log(qpumpkin.map([{"a":{"b":1}},{'a':{"b":2}}],"a.b"));
 // console.log(qpumpkin.reduce([1,2],(sum,n) => sum+n, 0));
