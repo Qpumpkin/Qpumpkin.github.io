@@ -999,11 +999,16 @@ var qpumpkin = {
     let keys = Object.keys(collection).map( key => isNaN(key)?key:Number(key));
     return keys.map( key => mapper(collection[key],key,collection));
   },
-  // orderBy:
-  // function orderBy(collection,iteratees,orders) {
-  //   let iters = iteratees.map( iter => this.iteratee(iter));
-  //   for (let i=0; i<iters.length)
-  // },
+  orderBy:
+  function orderBy(collection,iteratees,orders) {
+    const iters = iteratees.map(ele => this.iteratee(ele));
+    for (let i=0; i<orders.length; i++) {
+      if (orders[i] === "desc") {
+        iters[i] = this.negate(iters[i]);
+      }
+    }
+    return this.sortBy(collection,iteratees);
+  },
   partition:
   function partition(collection,predicate) {
     predicate = this.iteratee(predicate);
@@ -1027,8 +1032,164 @@ var qpumpkin = {
   },
   sample:
   function sample(collection) {
-    let randIndex = Math.floor(Math.random() * collection.length);
-    return collection[randIndex];
+    let inv = Object.entries(collection);
+    let sample = inv[Math.random()*inv.length|0]
+    if (Array.isArray(collection)) {
+      return sample[1];
+    } else {
+      return {[sample[0]] : sample[1]};
+    }
+  },
+  sampleSize:
+  function sampleSize(collection,n=1) {
+    const inv = new Set();
+    const keys = Object.keys(collection);
+    n = n<=keys.length ? n : keys.length;
+    while (inv.size < n) {
+      let rand = Math.random() * keys.length | 0;
+      if (!inv.has(keys[rand])) {
+        inv.add(keys[rand]);
+      }
+    }
+    let result;
+    if (Array.isArray(collection)) {
+      result = [];
+      inv.forEach( ele => result.push(collection[ele]));
+    } else {
+      result = {};
+      inv.forEach( ele => result[ele]=collection[ele]);
+    }
+    return result;
+  },
+  shuffle:
+  function shuffle(collection) {
+    let result = collection.slice();
+    for (let i=result.length-1; i>0; i--) {
+      const rand = Math.random() * i | 0;
+      swap(result,i,rand%(i+1));
+    }
+    return result;
+  },
+  size:
+  function size(collection) {
+    return Object.keys(collection).length;
+  },
+  some:
+  function some(collection,predicate) {
+    predicate = this.iteratee(predicate);
+    for (const key in collection) {
+      if (predicate(collection[key])) {
+        return true;
+      }
+    }
+    return false;
+  },
+  sortBy:
+  function sortBy(collection,iteratees) {
+    const result = collection.slice();
+    const iters = iteratees.map(ele => this.iteratee(ele));
+    result.sort(function (pre,after) {
+      for (let i=0; i<iters.length; i++) {
+        const criPre = iters[i](pre);
+        const criAfter = iters[i](after);
+        if (criPre > criAfter) {
+          return 1;
+        } else if (criPre < criAfter) {
+          return -1;
+        }
+      }
+      return 0;
+    });
+    return result;
+  },
+  castArray:
+  function castArray(value) {
+    if (Array.isArray(value)) {
+      return value;
+    } else if (arguments.length === 0) {
+      return [];
+    } else {
+      return [value];
+    }
+  },
+  conformsTo:
+  function conformsTo(object,source) {
+    for (let key in source) {
+      if (!source[key](object[key])) {
+        return false;
+      }
+    }
+    return true;
+  },
+  eq:
+  function eq(object,other) {
+    if (object != object) {
+      return other != other;
+    } else {
+      if (typeof object === typeof other) {
+        return object == other;
+      } else {
+        return false;
+      }
+    }
+  },
+  gt:
+  function gt(value,other) {
+    return value > other;
+  },
+  gte:
+  function gte(value,other) {
+    return value >= other;
+  },
+  isArguments:
+  function isArguments(value) {
+    return Object.prototype.toString.call(value) === "[object Arguments]";
+  },
+  isArray:
+  function isArray(value) {
+    return Object.prototype.toString.call(value) === "[object Array]";
+  },
+  isArrayBuffer:
+  function isArrayBuffer(value) {
+    return Object.prototype.toString.call(value) === "[object ArrayBuffer]";
+  },
+  isArrayLike:
+  function isArrayLike(value) {
+    return typeof value != "function" && value.hasOwnProperty("length");
+  },
+  isArrayLikeObject:
+  function isArrayLikeObject(value) {
+    return typeof value === 'object' && value.hasOwnProperty("length");
+  },
+  isBoolean:
+  function isBoolean(value) {
+    return Object.prototype.toString.call(value) === "[object Boolean]";
+  },
+  isDate:
+  function isDate(value) {
+    return Object.prototype.toString.call(value) === '[object Date]';
+  },
+  isElement:
+  function isElement(value) {
+    return value !== null && typeof value === 'object' && value.nodeType === 1;
+  },
+  isEmpty:
+  function isEmpty(value) {
+    return this.isNil(value) || Object.values(value).length===0;
+  },
+  isNil:
+  function isNil(value) {
+    return value===null && value===undefined;
+  },
+  isFunction:
+  function isFunction(value) {
+    return typeof value === "function";
+  },
+  negate:
+  function negate(predicate) {
+    return function(...args) {
+      return !predicate(...args);
+    }
   },
   isEqual:
   function isEqual(value,other) {
@@ -1169,7 +1330,6 @@ function sliceArray(array,begin=0,end=array.length,step=1) {
   }
   return out;
 }
-
 function createMap(values,convertor) {
   if (convertor !== undefined) {
     values = values.map(element => convertor(element));
@@ -1177,7 +1337,6 @@ function createMap(values,convertor) {
   let map = new Set(values);
   return map;
 }
-
 function ensureNum(value,initial,backward) {
   value = Number(value);
   if (isNaN(value)) {
@@ -1193,12 +1352,27 @@ function ensureNum(value,initial,backward) {
     return value;
   }
 }
+function swap(array,i,j) {
+  const temp = array[i];
+  array[i] = array[j];
+  array[j] = temp;
+}
+// console.log(qpumpkin.conformsTo({a:1,b:2},{b:n=>n>2}))
+// console.log(qpumpkin.sortBy(
+//   [{'user':'fred','age':48},{'user':'barney','age':36},{'user':'fred','age': 40 },{'user': 'barney', 'age': 34 }],
+//   ['user', 'age']
+// ));
+// console.log(qpumpkin.some(
+//   [{'user': 'barney','active': true},{'user': 'fred','active': false}],
+//   ["active",false]));
 
-console.log(qpumpkin.reject(
-  [{'user': 'barney', 'age': 36, 'active': false },{ 'user': 'fred',   'age': 40, 'active': true }],function(o) { return !o.active; }))
-console.log(qpumpkin.partition(
-  [{'user':'barney','age':36,'active':false},{'user':'fred','age': 40,'active':true},{'user': 'pebbles','age': 1,'active':false}],
-function(o){ return o.active; }));
+// console.log(qpumpkin.shuffle([1,2,3,4,5,6,7]));
+// console.log(qpumpkin.sampleSize({a:1,b:1}, 1));
+// console.log(qpumpkin.reject(
+//   [{'user': 'barney', 'age': 36, 'active': false },{ 'user': 'fred',   'age': 40, 'active': true }],function(o) { return !o.active; }))
+// console.log(qpumpkin.partition(
+//   [{'user':'barney','age':36,'active':false},{'user':'fred','age': 40,'active':true},{'user': 'pebbles','age': 1,'active':false}],
+// function(o){ return o.active; }));
 // console.log(qpumpkin.map([1,2,3,4,5],function(v,i,o) {return (v+i)%2==0}))
 // console.log(qpumpkin.map([{"a":{"b":1}},{'a':{"b":2}}],"a.b"));
 // console.log(qpumpkin.reduce([1,2],(sum,n) => sum+n, 0));
