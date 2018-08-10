@@ -1009,7 +1009,7 @@ var qpumpkin = {
         }
       }
     }
-    return this.sortBy(collection,iteratees);
+    return this.sortBy(collection,iters);
   },
   partition:
   function partition(collection,predicate) {
@@ -1183,10 +1183,6 @@ var qpumpkin = {
   function isNil(value) {
     return value===null || value===undefined;
   },
-  isFunction:
-  function isFunction(value) {
-    return typeof value === "function";
-  },
   negate:
   function negate(predicate) {
     return function(...args) {
@@ -1218,6 +1214,289 @@ var qpumpkin = {
     } else {
         return false;
     }
+  },
+  isEqualWith:
+  function isEqualWith(value,other,customizer) {
+    if (typeof value != typeof other) {
+      return false;
+    } else if (typeof value=="string" || typeof value=="number") {
+      return customizer(value,other);
+    } else {
+      const val = Object.entries(value);
+      const oth = Object.entries(other);
+      return val.every(function (cur,i) {
+        let test = customizer(cur[1],oth[i][1],cur[0],oth[i][0],val,oth);
+        if (test) {
+          return true;
+        } else if (test === undefined) {
+          return cur[1] == oth[i][1];
+        } else {
+          return false;
+        }
+      });
+    }
+  },
+  isError:
+  function isError(value) {
+    return value instanceof Error;
+  },
+  isFinite:
+  function isFinite(value) {
+    return Number.isFinite(value);
+  },
+  isFunction:
+  function isFunction(value) {
+    return typeof value === "function";
+  },
+  isInteger:
+  function isInteger(value) {
+    return Number.isInteger(value);
+  },
+  isLength:
+  function isLength(value) {
+    return value === this.toLength(value);
+  },
+  isMap:
+  function isMap(value) {
+    return Object.prototype.toString.call(value) === "[object Map]";
+  },
+  isMatch:
+  function isMatch(object,source) {
+    let predicate = this.matches(source);
+    return predicate(object);
+  },
+  isMatchWith:
+  function isMatchWith(object,source,customizer) {
+    for (const key in object) {
+      const flag = customizer(object[key],source[key]);
+      if (flag || flag!==undefined || object[key]!=source[key]) {
+        return false;
+      }
+    }
+    return true;
+  },
+  isNaN:
+  function isNaN(value) {
+    return Number.isNaN(value);
+  },
+  isNative:
+  function isNative(value) {
+    return value.toString().includes("[native code]");
+  },
+  isNumber:
+  function isNumber(value) {
+    return Object.prototype.toString.call(value) === "[object Number]";
+  },
+  isObject:
+  function isObject(value) {
+    return value!==null || typeof value==="undefined" || typeof value==="function";
+  },
+  isObjectLike:
+  function isObjectLike(value) {
+    return value!==null || typeof value==="object";
+  },
+  isPlainObject:
+  function isPlainObject(value) {
+    return typeof value==="object" && (value.__proto__===Object.prototype||value.__proto__===undefined);
+  },
+  isRegExp:
+  function isRegExp(value) {
+     return Object.prototype.toString.call(value) === "[object RegExp]";
+  },
+  isSafeInteger:
+  function isSafeInteger(value) {
+    return Number.isSafeInteger(value);
+  },
+  isSet:
+  function isSet(value) {
+    return Object.prototype.toString.call(value) === "[object Set]";
+  },
+  isString:
+  function isString(value) {
+    return Object.prototype.toString.call(value) === "[object String]";
+  },
+  isSymbol:
+  function isSymbol(value) {
+    return typeof value === "symbol";
+  },
+  isTypedArray:
+  function isTypedArray(value) {
+    const type = Object.prototype.toString.call(value);
+    return type.includes("Array") && type.length>14;
+  },
+  isUndefined:
+  function isUndefined(value) {
+    return value === undefined;
+  },
+  isWeakMap:
+  function isWeakMap(value) {
+    return Object.prototype.toString.call(value) == "[object WeakMap]";
+  },
+  isWeakSet:
+  function isWeakMap(value) {
+    return Object.prototype.toString.call(value) == "[object WeakSet]";
+  },
+  lt:
+  function lt(value,other) {
+    return value<other;
+  },
+  lte:
+  function lte(value,other) {
+    return value<=other;
+  },
+  toArray:
+  function toArray(value) {
+    if (value===null || value===undefined) {
+      return [];
+    } else {
+      return Object.values(value);
+    }
+  }, 
+  toFinite:
+  function toFinite(value) {
+    if (Number.isFinite(value)) {
+      return value;
+    } else if (this.isNil(value)) {
+      return 0;
+    } else {
+      return value>0 ? Number.MAX_VALUE : Number.MIN_VALUE;
+    }
+  },
+  toInteger:
+  function toInteger(value) {
+    const result = this.toFinite(value);
+    return result | 0;
+  },
+  toLength:
+  function toLength(value) {
+    if (value < 0 || isNaN(value)) {
+      return 0;
+    } else if (value === Infinity) {
+      return 4294967295;
+    } else {
+      return parseInt(value);
+    }
+  },
+  toNumber:
+  function toNumber(value) {
+    return Number(value);
+  },
+  assign:
+  function assign(object,...sources) {
+    return sources.reduce(function (res,obj) {
+      for (const key in obj) {
+        res[key] = obj[key];
+      }
+      return res;
+    },object);
+  },
+  toSafeInteger:
+  function toSafeInteger(value) {
+    if (isNaN(value)) {
+      return 9007199254740991;
+    } else {
+      value = Number(value);
+    }
+    if (this.isFinite(value)) {
+      return value | 0;
+    } else if (value<0) {
+      return -9007199254740991
+    } else {
+      return 9007199254740991;
+    }
+  },
+  add:
+  function add(augend,addend) {
+    return augend + addend;
+  },
+  ceil:
+  function ceil(number,precision=0) {
+    const multiple = 10 ** precision;
+    return Math.ceil(number*multiple) / multiple;
+  },
+  divide:
+  function divide(dividend,divisor) {
+    return dividend/divisor;
+  },
+  floor:
+  function floor(number,precision=0) {
+    const multiple = 10 ** precision;
+    return Math.floor(number*multiple) / multiple;
+  },
+  max:
+  function max(array) {
+    if (this.isEmpty(array)) {
+      return undefined;
+    } else {
+      return Math.max(...array);
+    }
+  },
+  maxBy:
+  function maxBy(array,iteratee=this.identity) {
+    const cvt = this.iteratee(iteratee);
+    const tIdx = array.reduce(function (acc,cur,idx) {
+      const comp = cvt(cur);
+      if (comp > acc[0]) {
+        acc[0] = comp;
+        acc[i] = idx;
+      }
+      return acc;
+    },[-Infinity,undefined])[1];
+    
+    return array[tIdx];
+  },
+  mean:
+  function mean(array) {
+    return sum(array) / array.length;
+  },
+  meanBy:
+  function meanBy(array,iteratee=this.identity) {
+    const cvt = this.iteratee(iteratee);
+    return array.reduce((acc,cur) => acc+cvt(cur),0) / array.length;
+  },
+  min:
+  function min(array) {
+    if (this.isEmpty(array)) {
+      return undefined;
+    } else {
+      return Math.min(...array);
+    }
+  },
+  minBy:
+  function minBy(array,iteratee=this.identity) {
+    const cvt = this.iteratee(iteratee);
+    const tIdx = array.reduce(function (acc,cur,idx) {
+      const comp = cvt(cur);
+      if (comp < acc[0]) {
+        acc[0] = comp;
+        acc[i] = idx;
+      }
+      return acc;
+    }, [Infinity, undefined])[1];
+
+    return array[tIdx];
+  },
+  multiply:
+  function multiply(mtr,mtd) {
+    return mtr * mtd;
+  },
+  round:
+  function round(number,precision=0) {
+    const mtp = 10 ** precision;
+    return Math.round(number*mtp) / mtp;
+  },
+  subtract:
+  function subtract(minuend,subtrahend) {
+    return minuend - subtrahend;
+  },
+  sum:
+  function sum(array) {
+    return array.reduce((acc,cur) => acc+cur,0);
+  },
+  sumBy:
+  function sumBy(array,iteratee=this.identity) {
+    const cvt = this.iteratee(iteratee);
+    return array.reduce((acc,cur) => acc+cvt(cur),0);
   },
   identity:
   function identity(value) {
@@ -1293,11 +1572,6 @@ var qpumpkin = {
       return true;
     }
   },
-  isMatch:
-  function isMatch(object,source) {
-    let predicate = this.matches(source);
-    return predicate(object);
-  },
   remove:
   function remove(array,predicate) {
     predicate = this.iteratee(predicate);
@@ -1359,6 +1633,15 @@ function swap(array,i,j) {
   array[i] = array[j];
   array[j] = temp;
 }
+// console.log(qpumpkin.assign({a:0},{a:1},{c:3}))
+// console.log(qpumpkin.isEqualWith(
+//   ['hello','goodbye'],['hi',"goodbye"],
+//   (a, b) => {
+//     if (/^h(?:i|ello)$/.test(a) && /^h(?:i|ello)$/.test(b)) {
+//       return true;
+//     }
+//   }
+// ));
 // console.log(qpumpkin.conformsTo({a:1,b:2},{b:n=>n>2}))
 // console.log(qpumpkin.sortBy(
 //   [{'user':'fred','age':48},{'user':'barney','age':36},{'user':'fred','age': 40 },{'user': 'barney', 'age': 34 }],
