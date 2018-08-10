@@ -1289,7 +1289,7 @@ var qpumpkin = {
   },
   isNaN:
   function isNaN(value) {
-    return Object.prototype.toString.call(value)==="[object Number]" && isNaN(value);
+    return Object.prototype.toString.call(value)==="[object Number]" && window.isNaN(value);
   },
   isNative:
   function isNative(value) {
@@ -1377,6 +1377,9 @@ var qpumpkin = {
   },
   toInteger:
   function toInteger(value) {
+    if (value === null) {
+      return Number.MAX_SAFE_INTEGER;
+    }
     const result = this.toFinite(value);
     return result | 0;
   },
@@ -1398,7 +1401,8 @@ var qpumpkin = {
   function assign(object,...sources) {
     return sources.reduce(function (res,cur) {
       const infos = Object.entries(cur);
-      for (const info in infos) {
+      for (const i in infos) {
+        const info = infos[i];
         res[info[0]] = info[1];
       }
       return res;
@@ -1647,6 +1651,7 @@ function swap(array,i,j) {
   array[i] = array[j];
   array[j] = temp;
 }
+console.log(qpumpkin.toInteger(null))
 // console.log(qpumpkin.mean([4, 2, 8, 6]))
 // console.log(qpumpkin.minBy([{ 'n': 1 }, { 'n': 2 }],function(o) { return o.n; }))
 // console.log(qpumpkin.assign({a:0},{a:1},{c:3}))
