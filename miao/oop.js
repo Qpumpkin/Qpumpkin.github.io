@@ -154,21 +154,50 @@ class MyMap {
 
 class MyArray {
   constructor (...values) {
+    let length;
     if (values.length == 0) {
-      Object.defineProperty(this,'_length',{value: 0, writable: true});      
+      length = 0;
     } else if (values.length == 1) {
       if (typeof values[0] == "number") {
-        Object.defineProperty(this,'_length',{value: values[0], writable: true});        
+        length = values[0];
       } else {
-        Object.defineProperty(this,'_length',{value: 1, writable: true});
         this[0] = values[0];
+        length = 1;
       }
     } else {
-      for (let i=0; i<values.length; i++) {
+      for (let i = 0; i < values.length; i++) {
         this[i] = values[i];
       }
-      Object.defineProperty(this,'_length',{value: values.length, writable: true});
+      length = values.length;
     }
+
+    Object.defineProperty(this,'length',{
+      get: function() {
+        let len = length;
+        for (let index in this) {
+          if (index>=len && index==parseInt(index)) {
+            len = index;
+          }
+        }
+        if (len >= length) {
+          length = len + 1;
+          return length;
+        } else {
+          return length;
+        }
+      },
+      set: function(val) {
+        let len = this.length;
+        if (val > len) {
+          length = val;
+        } else {
+          for (let i=val; i<len; i++) {
+            delete this[i];
+          }
+          length = val;
+        }
+      }
+    });
   }
   concat(...args) {
     let result = new MyArray();
@@ -601,29 +630,5 @@ class MyArray {
   unshift(...args) {
     this.splice(0,0,...args);
     return this.length;
-  }
-  get length() {
-    let length = this._length;
-    for (let index in this) {
-      if (index > length) {
-        length = index;
-      }
-    }
-    if (this._length <= length) {
-      this._length = length + 1;
-    }
-    return this._length;
-  }
-  set length(val) {
-    if (val >= this._length) {
-      this._length = val;
-      return this._length;
-    } else {
-      for (let i=val; i<this._length; i++) {
-        delete this[i];
-      }
-      this._length = val;
-      return this._length;
-    }
   }
 }
