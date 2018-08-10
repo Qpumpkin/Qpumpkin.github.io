@@ -1004,7 +1004,9 @@ var qpumpkin = {
     const iters = iteratees.map(ele => this.iteratee(ele));
     for (let i=0; i<orders.length; i++) {
       if (orders[i] === "desc") {
-        iters[i] = this.negate(iters[i]);
+        iters[i] = function (...args) {
+          return -iters[i].apply(null,args);
+        }
       }
     }
     return this.sortBy(collection,iteratees);
@@ -1179,7 +1181,7 @@ var qpumpkin = {
   },
   isNil:
   function isNil(value) {
-    return value===null && value===undefined;
+    return value===null || value===undefined;
   },
   isFunction:
   function isFunction(value) {
