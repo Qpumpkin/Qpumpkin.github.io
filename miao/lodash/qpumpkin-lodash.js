@@ -1001,15 +1001,25 @@ var qpumpkin = {
   },
   orderBy:
   function orderBy(collection,iteratees,orders) {
+    const result = collection.slice();
     const iters = iteratees.map(ele => this.iteratee(ele));
-    for (let i=0; i<orders.length; i++) {
-      if (orders[i] === "desc") {
-        iters[i] = function (...args) {
-          return -iters[i].apply(null,args);
+    const comp = function (a,b) {
+      if (a>b) { return 1; }
+      else if (a<b) { return -1; }
+      else { return 0; }  
+    }
+    result.sort(function (pre,aft) {
+      for(let i=0; i<iters.length; i++) {
+        const cPre = iters[i](pre);
+        const cAft = iters[i](aft);
+        const flag = orders[i]==="asc" ? comp(cPre,cAft) : comp(cAft,cPre);
+        if (flag != 0) {
+          return flag;
         }
       }
-    }
-    return this.sortBy(collection,iters);
+      return 0;
+    });
+    return result;
   },
   partition:
   function partition(collection,predicate) {
@@ -1268,16 +1278,18 @@ var qpumpkin = {
   isMatchWith:
   function isMatchWith(object,source,customizer) {
     for (const key in object) {
-      const flag = customizer(object[key],source[key]);
-      if (flag || flag!==undefined || object[key]!=source[key]) {
-        return false;
+      const flag = customizer(object[key],source[key],key,key,object,source);
+      if (!flag) {
+        if (flag!=undefined || object[key]!=source[key]) {
+          return false;
+        }
       }
     }
     return true;
   },
   isNaN:
   function isNaN(value) {
-    return Number.isNaN(value);
+    return Object.prototype.toString.call(value)==="[object Number]" && isNaN(value);
   },
   isNative:
   function isNative(value) {
@@ -1293,7 +1305,7 @@ var qpumpkin = {
   },
   isObjectLike:
   function isObjectLike(value) {
-    return value!==null || typeof value==="object";
+    return value!==null && typeof value==="object";
   },
   isPlainObject:
   function isPlainObject(value) {
@@ -1354,12 +1366,13 @@ var qpumpkin = {
   }, 
   toFinite:
   function toFinite(value) {
-    if (Number.isFinite(value)) {
-      return value;
-    } else if (this.isNil(value)) {
-      return 0;
+    if (value === Infinity) {
+      return Number.MAX_VALUE; 
+    } else if (value === -Infinity) {
+      return Number.MIN_VALUE;
     } else {
-      return value>0 ? Number.MAX_VALUE : Number.MIN_VALUE;
+      const result = Number(value);
+      return isNaN(result) ? 0 : result;
     }
   },
   toInteger:
@@ -1374,7 +1387,7 @@ var qpumpkin = {
     } else if (value === Infinity) {
       return 4294967295;
     } else {
-      return parseInt(value);
+      return value | 0;
     }
   },
   toNumber:
@@ -1383,9 +1396,10 @@ var qpumpkin = {
   },
   assign:
   function assign(object,...sources) {
-    return sources.reduce(function (res,obj) {
-      for (const key in obj) {
-        res[key] = obj[key];
+    return sources.reduce(function (res,cur) {
+      const infos = Object.entries(cur);
+      for (const info in infos) {
+        res[info[0]] = info[1];
       }
       return res;
     },object);
@@ -1438,7 +1452,7 @@ var qpumpkin = {
       const comp = cvt(cur);
       if (comp > acc[0]) {
         acc[0] = comp;
-        acc[i] = idx;
+        acc[1] = idx;
       }
       return acc;
     },[-Infinity,undefined])[1];
@@ -1447,7 +1461,7 @@ var qpumpkin = {
   },
   mean:
   function mean(array) {
-    return sum(array) / array.length;
+    return this.sum(array) / array.length;
   },
   meanBy:
   function meanBy(array,iteratee=this.identity) {
@@ -1469,7 +1483,7 @@ var qpumpkin = {
       const comp = cvt(cur);
       if (comp < acc[0]) {
         acc[0] = comp;
-        acc[i] = idx;
+        acc[1] = idx;
       }
       return acc;
     }, [Infinity, undefined])[1];
@@ -1633,6 +1647,8 @@ function swap(array,i,j) {
   array[i] = array[j];
   array[j] = temp;
 }
+// console.log(qpumpkin.mean([4, 2, 8, 6]))
+// console.log(qpumpkin.minBy([{ 'n': 1 }, { 'n': 2 }],function(o) { return o.n; }))
 // console.log(qpumpkin.assign({a:0},{a:1},{c:3}))
 // console.log(qpumpkin.isEqualWith(
 //   ['hello','goodbye'],['hi',"goodbye"],
@@ -1642,7 +1658,11 @@ function swap(array,i,j) {
 //     }
 //   }
 // ));
-// console.log(qpumpkin.conformsTo({a:1,b:2},{b:n=>n>2}))
+// console.log(qpumpkin.conformsTo({a:1,b:2},{b:n=>n>2}));
+// console.log(qpumpkin.orderBy(
+//   [{'user': 'fred','age': 48},{'user':'barney','age': 36},{'user':'fred','age':40},{'user':'barney','age':34}],
+//   ["user", "age"], ["asc", "desc"]
+// ))
 // console.log(qpumpkin.sortBy(
 //   [{'user':'fred','age':48},{'user':'barney','age':36},{'user':'fred','age': 40 },{'user': 'barney', 'age': 34 }],
 //   ['user', 'age']
