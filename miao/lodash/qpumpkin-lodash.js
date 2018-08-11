@@ -1377,7 +1377,7 @@ var qpumpkin = {
   },
   toInteger:
   function toInteger(value) {
-    if (value === null) {
+    if (value === undefined) {
       return Number.MAX_SAFE_INTEGER;
     }
     const result = this.toFinite(value);
@@ -1516,6 +1516,293 @@ var qpumpkin = {
     const cvt = this.iteratee(iteratee);
     return array.reduce((acc,cur) => acc+cvt(cur),0);
   },
+  clamp:
+  function clamp(number,lower,upper) {
+    if (number > upper) {
+      return upper;
+    } else if (number < lower) {
+      return lower;
+    } else {
+      return number;
+    }
+  },
+  inRange:
+  function inRange(number,start=0,end) {
+    if (end == undefined) {
+      end = start;
+      start = 0;
+    }
+    return number>start && number<end;
+  },
+  random:
+  function random(...args) {
+    const rand = Math.random();
+    if (args.length === 1) {
+      const result = rand * args[i];
+      return  Number.isInteger(args[i]) ? Math.round(result) : result; 
+    } else if (args.length === 2) {
+      const first = args[0];
+      const last = args[1];
+      if (typeof last === "boolean") {
+        return last ? first : Math.round(first);
+      } else {
+        const result = (last-first) * rand + first;
+        const float = Number.isInteger(first) || Number.isInteger(last);
+        return float ? result : Math.round(result);
+      }
+    } else {
+      const lower = args[0];
+      const upper = args[1];
+      const float = args[2] || !Number.isInteger(lower) || !Number.isInteger(upper);
+      const result = (upper-lower) * rand + lower;
+      return float ? result : Math.round(result);
+    }
+  },
+  assignIn:
+  function assignIn(object,...sources) {
+    return sources.reduce(function (res,cur) {
+      for (const key in cur) {
+        res[key] = cur[key];
+      }
+      return res;
+    },object);
+  },
+  at:
+  function at(object,paths) {
+    const result = [];
+    paths.forEach(function (path) {
+      let val = object;
+      path.split(/\.|\[|\]/g).forEach((path) => {
+        if (path != "") {
+          val=val[path];
+        }
+      });
+      result.push(val);
+    });
+    return result;
+  },
+  defaults:
+  function defaults(object,...sources) {
+    return sources.reduce(function (res,cur) {
+      for (const key in cur) {
+        if (res[key] === undefined) {
+          res[key] = cur[key];
+        }
+      }
+      return res;
+    },object);
+  },
+  defaultsDeep:
+  function defaultsDeep(object,...sources) {
+    return sources.reduce(function (res,cur) {
+      let node = res;
+      for (const key in cur) {
+        if (typeof cur[key]==="object" && cur[key]!==null) {
+          if (node[key] == undefined) {
+            node[key] = {};
+          };
+          defaultsDeep(node[key],cur[key]);
+        } else if (res[key] === undefined) {
+          node[key] = cur[key];
+        }
+      }
+      return res;
+    },object)
+  },
+  findKey:
+  function findKey(object,predicate) {
+    predicate = this.iteratee(predicate);
+    for (const key in object) {
+      if (predicate(object[key])) {
+        return key;
+      }
+    }
+    return undefined
+  },
+  findLastKey:
+  function findLastKey(object,predicate) {
+    predicate = this.iteratee(predicate);
+    const keys = Object.keys(object);
+    for (let i=keys.length-1; i>=0; i--) {
+      const key = keys[i];
+      if (predicate(object[key])) {
+        return key;
+      }
+    }
+    return undefined;
+  },
+  forIn:
+  function forIn(object,func=this.identity) {
+    for (const key in object) {
+      if (func(object[key],key,object) === false) {
+        return object;
+      };
+    }
+    return object;
+  },
+  forInRight:
+  function forInRight(object,func=this.identity) {
+    const keys = [];
+    for (const key in object) {
+      keys.push(key);
+    }
+    for (let i=keys.length-1; i>=0; i--) {
+      const key = keys[i];
+      if (func(object[key],key,object) === false) {
+        return object;
+      }
+    }
+    return object;
+  },
+  forOwn:
+  function forOwn(object,func=this.identity) {
+    const keys = Object.keys(object);
+    for (let i=0; i<keys.length; i++) {
+      const key = keys[i];
+      if (func(object[key],key,object) === false) {
+        return object;
+      }
+    }
+    return object;
+  },
+  forOwnRight:
+  function forOwnRight(object, func=this.identity) {
+    const keys = Object.keys(object);
+    for (let i=keys.length-1; i>=0; i--) {
+      const key = keys[i];
+      if (func(object[key],key,object) === false) {
+        return object;
+      }
+    }
+    return object;
+  },
+  functions:
+  function functions(object) {
+    return Object.keys(object);
+  },
+  functionsIn:
+  function functionsIn(object) {
+    const keys = [];
+    for (const key in object) {
+      keys.push(key);
+    }
+    return keys;
+  },
+  get:
+  function get(object,path,dftVal) {
+    if (typeof path === "string") {
+      path = path.split(/\.|\[|\]/g);
+    }
+    let node = object;
+    for (let i=0; i<path.length; i++) {
+      const cur = path[i];
+      if (cur !== "") {
+        node = node[cur];
+        if (node === undefined) {
+          return dftVal;
+        }
+      }
+    }
+    return node;
+  },
+  has:
+  function has(object,path) {
+    if (typeof path === "string") {
+      path = path.split(/\.|\[|\]/g);
+    }
+    let node = object;
+    for (let i=0; i<path.length; i++) {
+      const cur = path[i];
+      if (cur!=="" && node.hasOwnProperty(cur)) {
+        node = node[cur];
+      } else if (cur!=="") {
+        return false;
+      }
+    }
+    return true;
+  },
+  hasIn:
+  function hasIn(object,path) {
+    if (typeof path === "string") {
+      path = path.split(/\.|\[|\]/g);
+    }
+    let node = object;
+    for (let i=0; i<path.length; i++) {
+      const cur = path[i];
+      const next = node[cur];
+      if (cur !== "" && next!==undefined) {
+        node = next;
+      } else {
+        return false;
+      }
+    }
+    return true;
+  },
+  invert:
+  function invert(obj) {
+    const res = {};
+    const keys = Object.keys(obj);
+    keys.forEach(key => res[obj[key]]=key);
+    return res;
+  },
+  invertBy:
+  function invertBy(obj,iter=this.identity) {
+    iter = this.iteratee(iter);
+    const res = {};
+    const keys = Object.keys(obj);
+    keys.forEach(function (key) {
+      const k = iter(obj[key]);
+      if (res[k] === undefined) {
+        res[k] = [key];
+      } else {
+        res[k].push(key);
+      }
+    });
+    return res;
+  },
+  invoke:
+  function invoke(obj, path, ...args) {
+    path = path.split(/\.|\[|\]/g);
+    const func = path.pop();
+    const tar = this.get(obj, path);
+    return tar === undefined ? tar : tar[func](...args);
+  },
+  keys:
+  function keys(obj) {
+    return Object.keys(obj);
+  },
+  keysIn:
+  function keysIn(obj) {
+    const res = [];
+    for (const key in obj) {
+      res.push(key);
+    }
+    return res;
+  },
+  mapKeys:
+  function mapKeys(obj,iter=this.identity) {
+    iter = this.iteratee(iter);
+    const res = {};
+    const entries = Object.entries(obj);
+    for (let i=0; i<entries.length; i++) {
+      const info = entries[i];
+      const key = iter(info[1],info[0],obj);
+      res[key] = obj[info[0]];
+    }
+    return res;
+  },
+  mapValues:
+  function mapValues(obj,iter=this.identity) {
+    iter = this.iteratee(iter);
+    const res = {};
+    const entries = Object.entries(obj);
+    for (let i=0; i<entries.length; i++) {
+      const info = entries[i];
+      const val = iter(info[1],info[0],obj);
+      res[info[0]] = val;
+    }
+    return res;
+  },
   identity:
   function identity(value) {
     return value;
@@ -1651,92 +1938,3 @@ function swap(array,i,j) {
   array[i] = array[j];
   array[j] = temp;
 }
-console.log(qpumpkin.toInteger(null))
-// console.log(qpumpkin.mean([4, 2, 8, 6]))
-// console.log(qpumpkin.minBy([{ 'n': 1 }, { 'n': 2 }],function(o) { return o.n; }))
-// console.log(qpumpkin.assign({a:0},{a:1},{c:3}))
-// console.log(qpumpkin.isEqualWith(
-//   ['hello','goodbye'],['hi',"goodbye"],
-//   (a, b) => {
-//     if (/^h(?:i|ello)$/.test(a) && /^h(?:i|ello)$/.test(b)) {
-//       return true;
-//     }
-//   }
-// ));
-// console.log(qpumpkin.conformsTo({a:1,b:2},{b:n=>n>2}));
-// console.log(qpumpkin.orderBy(
-//   [{'user': 'fred','age': 48},{'user':'barney','age': 36},{'user':'fred','age':40},{'user':'barney','age':34}],
-//   ["user", "age"], ["asc", "desc"]
-// ))
-// console.log(qpumpkin.sortBy(
-//   [{'user':'fred','age':48},{'user':'barney','age':36},{'user':'fred','age': 40 },{'user': 'barney', 'age': 34 }],
-//   ['user', 'age']
-// ));
-// console.log(qpumpkin.some(
-//   [{'user': 'barney','active': true},{'user': 'fred','active': false}],
-//   ["active",false]));
-
-// console.log(qpumpkin.shuffle([1,2,3,4,5,6,7]));
-// console.log(qpumpkin.sampleSize({a:1,b:1}, 1));
-// console.log(qpumpkin.reject(
-//   [{'user': 'barney', 'age': 36, 'active': false },{ 'user': 'fred',   'age': 40, 'active': true }],function(o) { return !o.active; }))
-// console.log(qpumpkin.partition(
-//   [{'user':'barney','age':36,'active':false},{'user':'fred','age': 40,'active':true},{'user': 'pebbles','age': 1,'active':false}],
-// function(o){ return o.active; }));
-// console.log(qpumpkin.map([1,2,3,4,5],function(v,i,o) {return (v+i)%2==0}))
-// console.log(qpumpkin.map([{"a":{"b":1}},{'a':{"b":2}}],"a.b"));
-// console.log(qpumpkin.reduce([1,2],(sum,n) => sum+n, 0));
-// console.log(qpumpkin.includes('abcd', 'bc'));
-// console.log(qpumpkin.keyBy(
-//   [{'dir':'left','code':97},{'dir':'right','code':100}],
-//   function(o){return String.fromCharCode(o.code)}
-// ));
-// console.log(qpumpkin.flatMapDepth([1, 2], function (n) {return [[[n, n]]]},2));
-// console.log(qpumpkin.flatMapDeep([1, 2], function (n) {return [[n, n]]}))
-// console.log(qpumpkin.flatMap([1, 2], function (n){return [n, n];}))
-// console.log(qpumpkin.findLast([1, 2, 3, 4], function(n) {return n % 2 == 1;}))
-// console.log(qpumpkin.forEachRight([1, 2], function (value) {console.log(value)}));
-// console.log(qpumpkin.forEach({'a': 1,'b': 2},function (value, key) {console.log(value);}))
-// console.log(qpumpkin.countBy(['one', 'two', 'three'], 'length'))
-// console.log(qpumpkin.zipWith([1, 2], [10, 20], [100, 200], function (a, b, c) {return a + b + c;}))
-// console.log(qpumpkin.zipObjectDeep(['a.b[0].c', 'a.b[1].d'], [1, 2]).a);
-// console.log(qpumpkin.xorBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x'));
-// console.log(qpumpkin.zip(["a", "b"], [1, 2], [true, false]));
-// console.log(qpumpkin.xor([1, 2, 3, 4], [2, 3, 4, 5], [2, 4, 5, 6, 7], [5, 6, 7, 8]));
-// console.log(qpumpkin.sortedIndex([1, 2, 2, 2, 2, 2, 6], 2))
-// console.log(qpumpkin.reverse([1,2,3]));
-// console.log(qpumpkin.pull(['a', 'b', 'c', 'a', 'b', 'c'],'a','c'));
-// console.log(qpumpkin.pullAll(['a', 'b', 'c', 'a', 'b', 'c'], ['a', 'c']))
-// console.log(qpumpkin.pullAllBy([{'x':1},{'x':2},{'x':3},{'x':1}],[{ 'x': 1 }, { 'x': 3 }], 'x'));
-// console.log(qpumpkin.pullAt(['a', 'b', 'c', 'd'],[1,3]))
-// console.log(qpumpkin.last([1,2,3,4]));
-// console.log(qpumpkin.join(['a', 'b', 'c'], '~'));
-// console.log(qpumpkin.indexOf([1, 2, 1, 2], 2, -12))
-// console.log(qpumpkin.intersection([2,1],[2,3]))
-// console.log(qpumpkin.intersectionBy([{'x':1}], [{'x':2},{'x':1}],'x'));
-// console.log(qpumpkin.fromPairs([['a', 1],['b', 2]]))
-// console.log(qpumpkin.flattenDepth([1, [2, [3, [4]], 5]],2));
-// console.log(qpumpkin.flattenDeep([1, [2, [3, [4]], 5]]))
-// console.log(qpumpkin.flatten([1, [2, [3, [4]], 5]]));
-// console.log(qpumpkin.isEqual({x:1,y:2,e:3},{x:1,y:2,e:3}))
-// var users = [
-//   { 'user': 'barney', 'active': true },
-//   { 'user': 'fred', 'active': false },
-//   { 'user': 'pebbles', 'active': false }
-// ];
-// console.log(qpumpkin.chunk([1,2,3,4,5,6,7,8,],3))
-// console.log(qpumpkin.findLastIndex(
-//   [{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}],
-//   function(o) {return  o.user  ==  'pebbles';}));
-// console.log(qpumpkin.findIndex(
-//   [{"user":"barney","active":false},{"user":"fred","active":false},{"user":"pebbles","active":true}],
-//   function(o) { return  o.user  ==  'barney';}));
-// console.log(qpumpkin.dropRightWhile([{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}],"active"));
-// console.log(qpumpkin.difference([2,1,3,4,5],[2,3],[2,3,4,5]));
-// console.log(qpumpkin.differenceBy([1, 2, 3, 4], [1, 3], [4]))
-// console.log(qpumpkin.fill([1,2,3], 'a',0,-1));
-
-// console.log(
-//   qpumpkin.differenceBy([{'x':2,'y':2},{'x':1,'y':3},{'x':3,"y":3}], [{'x':1,'y':2}], 'x')
-// );
-// console.log(qpumpkin.nth(["a", "b", "c", "d"], 1));
