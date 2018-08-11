@@ -1803,6 +1803,70 @@ var qpumpkin = {
     }
     return res;
   },
+  merge:
+  function merge(obj,...src) {
+    for (let i=0; i<src.length; i++) {
+      const cur = src[i];
+      for (const key in cur) {
+        const objKtp = typeof obj[key];
+        const curKtp = typeof cur[key];
+        if (objKtp==="object" && curKtp==="object") {
+          merge(obj[key],cur[key]);
+        } else if (objKtp==="undefined" && curKtp!=="object") {
+          obj[key] = cur[key];
+        }
+      }
+    }
+    return obj;
+  },
+  mergeWith:
+  function mergeWith(obj,...other) {
+    const customizer = other.pop();
+    for (let i=0; i<other.length; i++) {
+      const cur = other[i];
+      for (const key in cur) {
+        const val = customizer(obj[key],cur[key],key,key,obj,cur);
+        if (val === undefined) {
+          obj[key] = cur[key];
+        } else {
+          obj[key] = val;
+        }
+      }
+    }
+    return obj;
+  },
+  omit:
+  function omit(obj,paths) {
+    const res = {};
+    const map = new Set(paths);
+    for (const key in obj) {
+      if (!map.has(key)) {
+        res[key] = obj[key]; 
+      }
+    }
+    return res;
+  },
+  omitBy:
+  function omitBy(obj,predicate=this.identity) {
+    const res = {};
+    for (const key in obj) {
+      if (!predicate(obj[key],key)) {
+        res[key] = obj[key];
+      }
+    }
+    return res;
+  },
+  pick:
+  function pick(obj,paths) {
+    const map = new Set(paths);
+    const res = {};
+    for (const key in obj) {
+      if (map.has(key)) {
+        res[key] = obj[key];
+      }
+    }
+    return res;
+  },
   identity:
   function identity(value) {
     return value;
