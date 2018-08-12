@@ -1532,6 +1532,9 @@ var qpumpkin = {
       end = start;
       start = 0;
     }
+    if (start > end) {
+      [start,end] = [end,start]; 
+    }
     return number>start && number<end;
   },
   random:
@@ -1860,12 +1863,251 @@ var qpumpkin = {
   function pick(obj,paths) {
     const map = new Set(paths);
     const res = {};
+    Object.keys(obj).forEach(key => map.has(key) && (res[key]=obj[key]));
+    return res;
+  },
+  pickBy:
+  function pickBy(obj,predicate=this.identity) {
+    const res = {};
+    Object.entries(obj)
+    .forEach(info => predicate(info[1],info[0]) && (res[info[0]]=info[1]));
+    return res;
+  },
+  result:
+  function result(obj,path,dftVal) {
+    if (typeof path === "string") {
+      path = path.split(/\.|\[|\]/g);
+    }
+    let node = obj;
+    for (let i = 0; i < path.length; i++) {
+      const cur = path[i];
+      const next = node[cur];
+      if (cur!=="" && next!==undefined) {
+        node = next;
+      } else if (cur !== "") {
+        if (typeof dftVal==="function") {
+          return dftVal.call(node);
+        } else {
+          return dftVal;
+        }
+      }
+    }
+    return node;
+  },
+  // set:
+  // function set(obj,path,) {
+
+  // },
+  // setWith:
+  // function setWith(obj,path,value,customizer) {
+
+  // },
+  // updateWith:
+  // function updateWith(obj,path,update,customizer=this.identity) {
+  //   if (typeof path === "string") {
+  //     path = path.split(/\.|\[|\]/g);
+  //   }
+  //   let node = obj;
+  //   for (let i=0; i<path.length; i++) {
+  //     const cur = path[i];
+  //     if (cur !== "") {
+  //       let next = node[cur];
+  //       if (next === undefined) {
+  //         next = customizer()
+  //         node[cur] = next===undefined ? {} : next;
+  //       }
+  //     }
+  //   }
+  // },
+  values: Object.values,
+  valuesIn: 
+  function valuesIn(obj) {
+    const res = [];
     for (const key in obj) {
-      if (map.has(key)) {
-        res[key] = obj[key];
+      res.push(obj[key]);
+    }
+    return res;
+  },
+  camelCase:
+  function camelCase(string="") {
+    return string.replace(/-|_/g,"");
+  },
+  capitalize:
+  function capitalize(string="") {
+    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+  },
+  endWith:
+  function endWith(string,target,pos=string.length) {
+    return string.slice(pos-1).indexOf(target) !== -1;
+  },
+  escape:
+  function escape(string="") {
+    const objStr = Object(string);    
+    const map = new Map(
+      [["&",'&amp;'],["<",'&lt;'],[">",'&gt;'],['"','&quot;'],["'",'&#39;']]
+    );
+    let res = "";
+    for (let i=0; i<objStr.length; i++) {
+      const cur = objStr[i];
+      if (map.has(cur)) {
+        res += map.get(cur);
+      } else {
+        res += cur;
       }
     }
     return res;
+  },
+  escapeRegExp:
+  function escapeRegExp(string="") {
+    const objStr = Object(string);
+    const map = new Set(["^","$","",".","*","+","?","(",")","[","]","{","}","|"]);
+    let res = "";
+    for (let i = 0; i < objStr.length; i++) {
+      const cur = objStr[i];
+      if (map.has(cur)) {
+        res += ("//" + cur);
+      } else {
+        res += cur;
+      }
+    }
+    return res;
+  },
+  // kebabCase:
+  // function kebabCase(string) {
+
+  // },
+  // toLowerCase:
+  // function toLowerCase() {
+
+  // },
+  // mixin:
+  // function mixin(object=this,source,option={}) {
+
+  // },
+  times:
+  function times(n,iter=this.identity) {
+    const res = [];
+    for (let i=0; i<n; i++) {
+      res.push(iter(i));
+    }
+    return res;
+  },
+  toPath:
+  function toPath(value) {
+    return typeof value === 'object' ? value : value.match(/[a-z0-9]+/gi);
+  },
+  uniqueId:
+  function uniqueId(prefix="") {
+    const Id = ++idCount;
+    return String(prefix) + Id;
+  },
+  cloneDeep:
+  function cloneDeep(value) {
+    if (typeof value!=="object" || value === null) {
+      return value;
+    } else {
+      const res = new value.constructor();
+      const keys = Object.keys(value);
+      keys.forEach(key => res[key]=cloneDeep(value[key]));
+      return res;
+    }
+  },
+  property:
+  function property(path) {
+    return obj => this.get(obj,path);
+  },
+  ary:
+  function ary(func,n=func.length) {
+    return (...args) => func.apply(null,args.slice(0,n));
+  },
+  unary:
+  function unary(func) {
+    return arg => func(arg);
+  },
+  once:
+  function once(func) {
+    const save;
+    return (...args) => save!==undefined
+                      ? save
+                      : func.apply(this,args);
+  },
+  spread:
+  function spread(func,start=0) {
+    return args => func.apply(this,args.slice(start));
+  },
+  curry:
+  function curry(func,arity=func.length) {
+    const paras = [];//储存参数。
+    const empty = [];//储存空缺参数的位置。
+
+    return function process(...args) {
+      let iter = 0;
+      const end = args.length;
+      
+      //参数先满足空缺的参数。
+      while (empty.length!==0 && iter<end) {
+        paras[empty.shift()] = args[iter];
+        iter += 1;
+      }
+
+      //遍历【args】把参数保存在【paras】中
+      for (; iter<end; iter++) {
+        const cur = args[iter];
+        if (cur === qpumpkin) {
+          empty.push(paras.length);
+          paras.length += 1;
+        } else {
+          paras.push(cur);
+        }
+      }
+
+      //检测传参个数是否达成要求
+      if (empty.length!==0 || paras.length<arity) {
+        return process;
+      } else {
+        return func(...paras);
+      }
+    };
+  },
+  memoize:
+  function memoize(func,resolver) {
+    
+    return function (obj) {
+      return func(obj)
+    }.bind(memoize);
+  },
+  flip:
+  function flip(func) {
+    return (...args) => func(args.reverse());
+  },
+  conforms:
+  function conforms(source) {
+    return obj => Object.keys(source)
+    .every(key => this.iteratee(source[key])(obj[key]));
+  },
+  flow:
+  function flow(funcs) {
+    return (...args) => funcs.reduce(
+      (acc,func,idx) => idx===0 ? func(...args) : func(acc)
+    )
+  },
+  method:
+  function method(path,...args) {
+    return obj => this.get(obj,path)(...args);
+  },
+  methodOf:
+  function methodOf(obj,...args) {
+    return path => this.get(obj,path)(...args);
+  },
+  nthArg:
+  function nthArg(n) {
+    return (...args) => n>0 ? args[n] : args[args.length+n]; 
+  },
+  propertyOf:
+  function propertyOf(obj) {
+    return function () {
+
+    }
   },
   identity:
   function identity(value) {
@@ -1889,6 +2131,7 @@ var qpumpkin = {
       return func.apply(thisArg, args);
     }
   },
+  /*-------------------tool-------------------*/
   iteratee:
   function iteratee(value) {
     if (value instanceof Function) {
@@ -2002,3 +2245,4 @@ function swap(array,i,j) {
   array[i] = array[j];
   array[j] = temp;
 }
+let idCount = 0;
