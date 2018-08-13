@@ -2029,7 +2029,7 @@ var qpumpkin = {
     let save;
     return (...args) => save!==undefined
                       ? save
-                      : func.apply(this,args);
+                      : func.apply(null,args);
   },
   spread:
   function spread(func,start=0) {
