@@ -1794,6 +1794,33 @@ var qpumpkin = {
   // function mixin(object=this,source,option={}) {
 
   // },
+  defaultTo: function (value,dftVal) {
+    return isNaN(value)&&value!==null ? dftVal : value;
+  },
+  range: function (start=0,end,step=1) {
+    if (end === undefined) {
+      end = start;
+      start = 0;
+    }
+    let acc = start;
+    const res = [];
+    let i = start;
+    if (start > end) {
+      [start, end] = [end, start];
+      step = step<=0 ? step : -1;
+      res.push(acc);
+      i = start - step;
+      acc += step;
+    }
+    for (; i<end && acc<end; i++) {
+      res.push(acc);
+      acc += step;
+    }
+    return res;
+  },
+  rangeRight: function (start=0,end,step=1) {
+    return this.range(start,end,step).reverse();
+  },
   times: function (n,iter=this.identity) {
     const res = [];
     for (let i=0; i<n; i++) {
@@ -1889,8 +1916,8 @@ var qpumpkin = {
   },
   flow: function (funcs) {
     return (...args) => funcs.reduce(
-      (acc,func,idx) => func(...args)
-    ,funcs.shift()(...args));
+      (acc,func) => func(acc)
+      ,funcs.shift()(...args));
   },
   method: function (path,...args) {
     return obj => this.get(obj,path)(...args);
