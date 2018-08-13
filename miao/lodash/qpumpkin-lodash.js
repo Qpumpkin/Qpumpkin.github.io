@@ -2006,7 +2006,8 @@ var qpumpkin = {
     if (typeof value!=="object" || value === null) {
       return value;
     } else {
-      const res = new value.constructor();
+      const ctor = value.constructor;
+      const res = ctor===RegExp ? ctor(value) : ctor();
       const keys = Object.keys(value);
       keys.forEach(key => res[key]=cloneDeep(value[key]));
       return res;
@@ -2069,13 +2070,13 @@ var qpumpkin = {
       }
     };
   },
-  memoize:
-  function memoize(func,resolver) {
+  // memoize:
+  // function memoize(func,resolver) {
     
-    return function (obj) {
-      return func(obj)
-    }.bind(memoize);
-  },
+  //   return function (obj) {
+  //     return func(obj)
+  //   }.bind(memoize);
+  // },
   flip:
   function flip(func) {
     return (...args) => func(args.reverse());
@@ -2103,12 +2104,12 @@ var qpumpkin = {
   function nthArg(n) {
     return (...args) => n>0 ? args[n] : args[args.length+n]; 
   },
-  propertyOf:
-  function propertyOf(obj) {
-    return function () {
+  // propertyOf:
+  // function propertyOf(obj) {
+  //   return function () {
 
-    }
-  },
+  //   }
+  // },
   identity:
   function identity(value) {
     return value;
