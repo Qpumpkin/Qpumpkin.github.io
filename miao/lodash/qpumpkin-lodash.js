@@ -175,7 +175,7 @@ var qpumpkin = {
       let temp;
       for (let i=0; i<array.length; i++) {
         if (array[i] instanceof Array) {
-          temp = flattenDepth(array[i],depth-1);
+          temp = this.flattenDepth(array[i],depth-1);
           out.push(...temp);
         } else {
           out.push(array[i]);
@@ -1109,7 +1109,7 @@ var qpumpkin = {
         for (let i=0; i<vKeys.length; i++) {
           let curKey = vKeys[i];
           if (value[curKey] !== other[curKey]) {
-            if (!isEqual(value[curKey],other[curKey])) {
+            if (!this.isEqual(value[curKey],other[curKey])) {
               return false;
             }
           }
@@ -1636,7 +1636,7 @@ var qpumpkin = {
         const objKtp = typeof obj[key];
         const curKtp = typeof cur[key];
         if (objKtp==="object" && curKtp==="object") {
-          merge(obj[key],cur[key]);
+          this.merge(obj[key],cur[key]);
         } else if (objKtp==="undefined" && curKtp!=="object") {
           obj[key] = cur[key];
         }
@@ -1842,7 +1842,7 @@ var qpumpkin = {
       const ctor = value.constructor;
       const res = ctor===RegExp ? ctor(value) : ctor();
       const keys = Object.keys(value);
-      keys.forEach(key => res[key]=cloneDeep(value[key]));
+      keys.forEach(key => res[key]=this.cloneDeep(value[key]));
       return res;
     }
   },
@@ -1859,7 +1859,7 @@ var qpumpkin = {
     let save;
     return (...args) => save!==undefined
                       ? save
-                      : func.apply(null,args);
+                      : save=func.apply(null,args);
   },
   spread: function (func,start=0) {
     return args => func.apply(this,args.slice(start));
