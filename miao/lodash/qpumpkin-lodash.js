@@ -1,6 +1,5 @@
 var qpumpkin = {
-  chunk:
-  function chunk(array,size=1) {
+  chunk: function (array,size=1) {
     let subSize = 0;
     let subArr = [];
     let out = [];
@@ -18,20 +17,17 @@ var qpumpkin = {
 
     return out;
   },
-  compact:
-  function compact(array) {
+  compact: function (array) {
     let out = [];
     for (let i=0; i<array.length; i++) {
       array[i] && out.push(array[i]);
     }
     return out;
   },
-  concat:
-  function concat(...arg) {
+  concat: function (...arg) {
     return this.flatten(arg);
   },
-  difference:
-  function difference(array,...values) {
+  difference: function (array,...values) {
     values = this.flatten(values);
     let map = createMap(values);
 
@@ -40,8 +36,7 @@ var qpumpkin = {
     );
     return out;
   },
-  differenceBy:
-  function differenceBy(array,...other) {
+  differenceBy: function (array,...other) {
     let argLen = arguments.length;
     if (arguments[argLen-1] instanceof Array) {
       return this.difference(array,...other);
@@ -59,8 +54,7 @@ var qpumpkin = {
       return out;
     }
   },
-  differenceWith:
-  function differenceWith(arr,otArr,comp) {
+  differenceWith: function (arr,otArr,comp) {
     let [ref] = otArr;
     let out = arr.filter(
       element => !comp(element,ref)
@@ -68,8 +62,7 @@ var qpumpkin = {
 
     return out;
   },
-  drop:
-  function drop(array,n=1) {
+  drop: function (array,n=1) {
     if (array.length === 0) {
       return [];
     } else {
@@ -82,8 +75,7 @@ var qpumpkin = {
       return out;
     }
   },
-  dropRight:
-  function dropRight(array,n=1) {
+  dropRight: function (array,n=1) {
     if (array.length === 0) {
       return [];
     } else {
@@ -99,8 +91,7 @@ var qpumpkin = {
       }
     }
   },
-  dropRightWhile:
-  function dropRightWhile(array,predicate) {
+  dropRightWhile: function (array,predicate) {
     predicate = this.iteratee(predicate);
 
     let outLen;
@@ -114,8 +105,7 @@ var qpumpkin = {
 
     return out;
   },
-  dropWhile:
-  function dropWhile(array,predicate) {
+  dropWhile: function (array,predicate) {
     predicate = this.iteratee(predicate);
     let dropLen = 0;
     for (let i=0; i<array.length; i++) {
@@ -129,8 +119,7 @@ var qpumpkin = {
 
     return out;
   },
-  fill:
-  function fill(array,value,start=0,end=array.length) {
+  fill: function (array,value,start=0,end=array.length) {
     let len = array.length;
     start = ensureNum(start,0,len);
     end = ensureNum(end,len,len);
@@ -139,8 +128,7 @@ var qpumpkin = {
     }
     return array;
   },
-  findIndex:
-  function findIndex(array,predicate,fromIndex=0) {
+  findIndex: function (array,predicate,fromIndex=0) {
     if (!(array&&array.length>0)) {
       return -1;
     } else {
@@ -155,8 +143,7 @@ var qpumpkin = {
       return -1;
     }
   },
-  findLastIndex:
-  function findLastIndex(array,predicate,fromIndex=array.length-1) {
+  findLastIndex: function (array,predicate,fromIndex=array.length-1) {
     if (!(array&&array.length>0)) {
       return -1;
     } else {
@@ -171,20 +158,16 @@ var qpumpkin = {
       return -1;
     }
   },
-  head:
-  function head(array) {
+  head: function (array) {
     return array[0];
   },
-  flatten:
-  function flatten(array) {
+  flatten: function (array) {
     return this.flattenDepth(array,1);
   },
-  flattenDeep:
-  function flattenDeep(array) {
+  flattenDeep: function (array) {
     return this.flattenDepth(array,Infinity);
   },
-  flattenDepth:
-  function flattenDepth(array,depth=1) {
+  flattenDepth: function (array,depth=1) {
     if (depth == 0) {
       return array.slice();
     } else {
@@ -202,8 +185,7 @@ var qpumpkin = {
       return out;
     }
   },
-  fromPairs:
-  function fromPairs(pairs) {
+  fromPairs: function (pairs) {
     let objPairs = this.flatten(pairs);
     let out = {};
     for (let i=0; i<objPairs.length; i+=2) {
@@ -212,8 +194,7 @@ var qpumpkin = {
 
     return out;
   },
-  indexOf:
-  function indexOf(array,value,fromIndex=0) {
+  indexOf: function (array,value,fromIndex=0) {
     if (array.length === 0) {
       return -1;
     } else {
@@ -226,8 +207,7 @@ var qpumpkin = {
       return -1;
     }
   },
-  initial:
-  function initial(array) {
+  initial: function (array) {
     if (!array.length>1) {
       return [];
     } else {
@@ -240,8 +220,7 @@ var qpumpkin = {
     let out = sliceArray(array, 0, outLen);
     return out;
   },
-  intersection:
-  function intersection(array,...arrays) {
+  intersection: function (array,...arrays) {
     arrays = this.flatten(arrays);
     let set = new Set();
     arrays.forEach(
@@ -256,8 +235,7 @@ var qpumpkin = {
 
     return out
   },
-  intersectionBy:
-  function intersectionBy(array,...rest) {
+  intersectionBy: function (array,...rest) {
     let predicate = this.iteratee(rest.pop());
     rest = this.flatten(rest);
     let map = createMap(rest,predicate);
@@ -268,8 +246,7 @@ var qpumpkin = {
 
     return out;
   },
-  intersectionWith:
-  function intersectionWith(array,...rest) {
+  intersectionWith: function (array,...rest) {
     let predicate = rest.pop();
     rest = this.flatten(rest);
     let out = array.filter(
@@ -286,8 +263,7 @@ var qpumpkin = {
 
     return out;
   },
-  join:
-  function join(array,separator=",") {
+  join: function (array,separator=",") {
     if (!(array&&array.length>0)) {
       return "";
     } else {
@@ -309,12 +285,10 @@ var qpumpkin = {
       return out;
     }
   },
-  last:
-  function last(array) {
+  last: function (array) {
     return array[array.length - 1];
   },
-  lastIndexOf:
-  function lastIndexOf(array,value,fromIndex=array.length-1) {
+  lastIndexOf: function (array,value,fromIndex=array.length-1) {
     if (!(array&&array.length>0)) {
       return -1;
     } else {
@@ -328,16 +302,14 @@ var qpumpkin = {
       return -1;
     }
   },
-  nth:
-  function nth(array,n=0) {
+  nth: function (array,n=0) {
     if (n < 0) {
       return array[array.length + n];
     } else {
       return array[n];
     }
   },
-  pull:
-  function pull(array,...values) {
+  pull: function (array,...values) {
     if (array.length < 1) {
       return array;
     } else {
@@ -354,12 +326,10 @@ var qpumpkin = {
       return array;
     }
   },
-  pullAll:
-  function pullAll(array,values) {
+  pullAll: function (array,values) {
     return this.pull.apply(null,[array, ...values]);
   },
-  pullAllBy:
-  function pullAllBy(array,values,predicate) {
+  pullAllBy: function (array,values,predicate) {
     predicate = this.iteratee(predicate);
     let map = createMap(values,predicate);
     let index = 0;
@@ -373,8 +343,7 @@ var qpumpkin = {
     array.length = index;
     return array;
   },
-  pullAllWith:
-  function pullAllWith(array,values,comparator) {
+  pullAllWith: function (array,values,comparator) {
     let index = 0;
     for (let i=0; i<array.length; i++) {
       let cur = array[i];
@@ -393,8 +362,7 @@ var qpumpkin = {
     array.length = index;
     return array;
   },
-  pullAt:
-  function pullAt(array,indexes) {
+  pullAt: function (array,indexes) {
     let map = createMap(indexes);
     let index = 0;
     let pulled = [];
@@ -409,8 +377,7 @@ var qpumpkin = {
     array.length = index;
     return pulled;
   },
-  reverse:
-  function reverse(array) {
+  reverse: function (array) {
     array = array.map(element => element);
     let left = 0, right = array.length - 1;
     while (left < right) {
@@ -422,8 +389,7 @@ var qpumpkin = {
     }
     return array;
   },
-  slice:
-  function slice(array,start=0,end=array.length) {
+  slice: function (array,start=0,end=array.length) {
     start = ensureNum(start,0,array.length);
     end = ensureNum(end,array.length,array.length);
     let newArr = [];
@@ -434,8 +400,7 @@ var qpumpkin = {
     }
     return newArr;
   },
-  sortedIndex:
-  function sortedIndex(array,value) {
+  sortedIndex: function (array,value) {
     let begin = 0;
     let end = array.length;
     while (begin < end-1) {
@@ -448,8 +413,7 @@ var qpumpkin = {
     }
     return array[begin]>=value ? begin : end;
   },
-  sortedIndexBy:
-  function sortedIndexBy(array,value,convertor) {
+  sortedIndexBy: function (array,value,convertor) {
     convertor = this.iteratee(convertor);
     value = convertor(value);
     let begin = 0;
@@ -465,8 +429,7 @@ var qpumpkin = {
     }
     return convertor(array[begin])>=value ? begin : end;
   },
-  sortedIndexOf:
-  function sortedIndexOf(array,value) {
+  sortedIndexOf: function (array,value) {
     let begin = 0;
     let end = array.length;
     while (begin < end-1) {
@@ -485,8 +448,7 @@ var qpumpkin = {
       return -1;
     }
   },
-  sortedLastIndex:
-  function sortedLastIndex(array,value) {
+  sortedLastIndex: function (array,value) {
     let begin = 0;
     let end = array.length;
     while (begin < end - 1) {
@@ -499,8 +461,7 @@ var qpumpkin = {
     }
     return end;
   },
-  sortedLastIndexBy:
-  function sortedLastIndexBy(array,value,convertor) {
+  sortedLastIndexBy: function (array,value,convertor) {
     convertor = this.iteratee(convertor);
     value = convertor(value);
     let begin = 0;
@@ -516,8 +477,7 @@ var qpumpkin = {
     }
     return end;
   },
-  sortedLastIndexOf:
-  function sortedLastIndexOf(array,value) {
+  sortedLastIndexOf: function (array,value) {
     let begin = 0;
     let end = array.length;
     while (begin < end - 1) {
@@ -530,8 +490,7 @@ var qpumpkin = {
     }
     return array[begin]==value ? begin : -1;
   },
-  sortedUniq:
-  function sortedUniq(array) {
+  sortedUniq: function (array) {
     let result = [];
     for (let i=0; i<array.length; i++) {
       if (array[i] != array[i+1]) {
@@ -540,8 +499,7 @@ var qpumpkin = {
     }
     return result;
   },
-  sortedUniqBy:
-  function sortedUniqBy(array,comparator) {
+  sortedUniqBy: function (array,comparator) {
     let result = [];
     for (let i=0; i<array.length; i++) {
       let cur = comparator(array[i]);
@@ -552,21 +510,17 @@ var qpumpkin = {
     }
     return result;
   },
-  tail:
-  function tail(array) {
+  tail: function (array) {
     return array.slice(1);
   },
-  take:
-  function take(array,n=1) {
+  take: function (array,n=1) {
     return array.slice(0,n);
   },
-  takeRight:
-  function takeRight(array,n=1) {
+  takeRight: function (array,n=1) {
     n = array.length-n>0 ? array.length-n : 0
     return array.slice(n);
   },
-  takeRightWhile:
-  function takeRightWhile(array,predicate){
+  takeRightWhile: function (array,predicate){
     predicate = this.iteratee(predicate);
     for (let i=array.length-1; i>=0; i--) {
       if (!predicate(array[i],i,array)) {
@@ -575,8 +529,7 @@ var qpumpkin = {
     }
     return array.slice();
   },
-  takeWhile:
-  function takeWhile(array,predicate) {
+  takeWhile: function (array,predicate) {
     predicate = this.iteratee(predicate);
     for (let i=0; i<array.length; i++) {
       if (!predicate(array[i],i,array)) {
@@ -585,29 +538,24 @@ var qpumpkin = {
     }
     return array.slice();
   },
-  union:
-  function union(...arrays) {
+  union: function (...arrays) {
     arrays = Array.concat(...arrays);
     return this.uniq(arrays);
   },
-  unionBy:
-  function unionBy(...args) {
+  unionBy: function (...args) {
     let predicate = args.pop();
     args = this.flatten(args);
     return this.uniqBy(args,predicate);
   },
-  unionWith:
-  function unionWith(...args) {
+  unionWith: function (...args) {
     let comparator = this.iteratee(args.pop());
     args = this.flatten(args);
     return this.uniqWith(args,comparator);
   },
-  uniq:
-  function uniq(array) {
+  uniq: function (array) {
     return [...new Set(array)];
   },
-  uniqBy:
-  function uniqBy(array,predicate) {
+  uniqBy: function (array,predicate) {
     predicate = this.iteratee(predicate);
     let map = new Set();
     let result = array.filter(
@@ -623,8 +571,7 @@ var qpumpkin = {
     );
     return result;
   },
-  uniqWith:
-  function uniqWith(array,comparator) {
+  uniqWith: function (array,comparator) {
     let result = array.reduce(
       function (acc,cur) {
         for (let obj of acc) {
@@ -637,8 +584,7 @@ var qpumpkin = {
       },[]);
       return result;
   },
-  unzip:
-  function unzip(arrays) {
+  unzip: function (arrays) {
     let unit1 = arrays[0];
     let unit2 = arrays[1];
     let result = [];
@@ -651,8 +597,7 @@ var qpumpkin = {
     );
     return result;
   },
-  unzipWith:
-  function unzipWith(array,unZipper) {
+  unzipWith: function (array,unZipper) {
     let unit1 = array[0];
     let unit2 = array[1];
     let result = [];
@@ -664,13 +609,11 @@ var qpumpkin = {
     );
     return result;
   },
-  without:
-  function without(array,...values) {
+  without: function (array,...values) {
     let map = new Set(values);
     return array.filter( element => !map.has(element));
   },
-  xor:
-  function xor(...arrays) {
+  xor: function (...arrays) {
     arrays = this.flatten(arrays);
     let map = new Set();
     let multi = arrays.filter(
@@ -686,8 +629,7 @@ var qpumpkin = {
     let tMap = new Set(multi);
     return arrays.filter( element => !tMap.has(element));
   },
-  xorBy:
-  function xorBy(...args) {
+  xorBy: function (...args) {
     let predicate = this.iteratee(args.pop());
     args = this.flatten(args);
     let map = new Set();
@@ -703,8 +645,7 @@ var qpumpkin = {
     
     return args.filter((element) => !multi.has(predicate(element)));
   },
-  xorWith:
-  function xorWith(...args) {
+  xorWith: function (...args) {
     let comparator = args.pop();
     args = this.flatten(args);
     let result = args.filter(function (element,index) {
@@ -718,8 +659,7 @@ var qpumpkin = {
       });
     return result;
   },
-  zip:
-  function zip(...arrays) {
+  zip: function (...arrays) {
     let unit1 = [];
     let unit2 = [];
     arrays.forEach(function (element) {
@@ -728,14 +668,12 @@ var qpumpkin = {
       });
     return [unit1, unit2];
   },
-  zipObject:
-  function zipObject(props,values) {
+  zipObject: function (props,values) {
     let result = {};
     props.forEach( (prop,index) => result[prop]=values[index] );
     return result;
   },
-  zipObjectDeep:
-  function zipObjectDeep(props,values) {
+  zipObjectDeep: function (props,values) {
     let result = {};
     props.reduce(function(acc,element,index) {
       let atrSet = element.split(".");
@@ -769,8 +707,7 @@ var qpumpkin = {
       }
     }
   },
-  zipWith:
-  function zipWith(...args) {
+  zipWith: function (...args) {
     let zipper = args.pop();
     let first = [];
     let second = [];
@@ -780,8 +717,7 @@ var qpumpkin = {
     }
     return [zipper(...first),zipper(...second)];
   },
-  countBy:
-  function countBy(collection,counter) {
+  countBy: function (collection,counter) {
     counter = this.iteratee(counter);
     let result = {};
     for (let key in collection) {
@@ -794,8 +730,7 @@ var qpumpkin = {
     }
     return result;
   },
-  forEach:
-  function forEach(collection,operate) {
+  forEach: function (collection,operate) {
     if (collection instanceof Array) {
       for (let i=0; i<collection.length; i++) {
         let cur = collection[i];
@@ -814,8 +749,7 @@ var qpumpkin = {
       return collection;
     }
   },
-  forEachRight:
-  function forEachRight(collection,operate) {
+  forEachRight: function (collection,operate) {
     if (Array.isArray(collection)) {
       for (let i=collection.length-1; i>=0; i--) {
         operate(collection[i]);
@@ -825,8 +759,7 @@ var qpumpkin = {
       return this.forEach(collection,operate);
     }
   },
-  every:
-  function every(collection,predicate) {
+  every: function (collection,predicate) {
     predicate = this.iteratee(predicate);
     for (let k in collection) {
       if (!predicate(collection[k])) {
@@ -835,8 +768,7 @@ var qpumpkin = {
     }
     return true;
   },
-  filter:
-  function filter(collection,predicate) {
+  filter: function (collection,predicate) {
     predicate = this.iteratee(predicate);
     if (collection instanceof Array) {
       let out = [];
@@ -854,8 +786,7 @@ var qpumpkin = {
       return out;
     }
   },
-  find:
-  function find(collection,predicate,fromIndex=0) {
+  find: function (collection,predicate,fromIndex=0) {
     let end = collection.length;
     predicate = this.iteratee(predicate);
     if (Array.isArray(collection)) {
@@ -878,8 +809,7 @@ var qpumpkin = {
       return undefined;
     }
   },
-  findLast:
-  function findLast(collection,predicate,fromIndex=collection.length-1) {
+  findLast: function (collection,predicate,fromIndex=collection.length-1) {
     let end = collection.length;
     predicate = this.iteratee(predicate);
     if (Array.isArray(collection)) {
@@ -899,20 +829,16 @@ var qpumpkin = {
       return this.find(collection,predicate);
     }
   },
-  flatMap:
-  function flatMap(collection,iteratee) {
+  flatMap: function (collection,iteratee) {
     return this.flatten(collection.map(ele => iteratee(ele)));
   },
-  flatMapDeep:
-  function flatMapDeep(collection,iteratee) {
+  flatMapDeep: function (collection,iteratee) {
     return this.flattenDeep(collection.map( ele => iteratee(ele)));
   },
-  flatMapDepth:
-  function flatMapDepth(collection,iteratee,depth=1) {
+  flatMapDepth: function (collection,iteratee,depth=1) {
     return this.flattenDepth(collection.map(ele => iteratee(ele)),depth);
   },
-  groupBy:
-  function groupBy(collection,predicate) {
+  groupBy: function (collection,predicate) {
     predicate = this.iteratee(predicate);
     if (collection instanceof Array) {
       let out = {};
@@ -940,8 +866,7 @@ var qpumpkin = {
       return out;
     }
   },
-  includes:
-  function includes(collection,value,fromIndex=0) {
+  includes: function (collection,value,fromIndex=0) {
     if (collection instanceof Object) {
       collection = Object.values(collection);
       if (this.indexOf(collection,value,fromIndex) == -1) {
@@ -972,15 +897,13 @@ var qpumpkin = {
       }
     }
   },
-  invokeMap:
-  function invokeMap(collection,path,...args) {
+  invokeMap: function (collection,path,...args) {
     if (typeof path == 'string') {
       path = collection[0][path];
     }
     return collection.map(ele => path.apply(ele,args));
   },
-  keyBy:
-  function keyBy(collection,convertor) {
+  keyBy: function (collection,convertor) {
     let result = {};
     convertor = this.iteratee(convertor);
     for (let item in collection) {
@@ -993,14 +916,12 @@ var qpumpkin = {
     }
     return result;
   },
-  map:
-  function map(collection,mapper) {
+  map: function (collection,mapper) {
     mapper = this.iteratee(mapper);
     let keys = Object.keys(collection).map( key => isNaN(key)?key:Number(key));
     return keys.map( key => mapper(collection[key],key,collection));
   },
-  orderBy:
-  function orderBy(collection,iteratees,orders) {
+  orderBy: function (collection,iteratees,orders) {
     const result = collection.slice();
     const iters = iteratees.map(ele => this.iteratee(ele));
     const comp = function (a,b) {
@@ -1021,8 +942,7 @@ var qpumpkin = {
     });
     return result;
   },
-  partition:
-  function partition(collection,predicate) {
+  partition: function (collection,predicate) {
     predicate = this.iteratee(predicate);
     let result = [[],[]];
     for (let i=0; i<collection.length; i++) {
@@ -1035,15 +955,13 @@ var qpumpkin = {
     }
     return result;
   },
-  reject:
-  function reject(collection,predicate) {
+  reject: function (collection,predicate) {
     predicate = this.iteratee(predicate);
     return collection.filter(function (ele,index,array) {
       return !predicate(ele,index,array);
     });
   },
-  sample:
-  function sample(collection) {
+  sample: function (collection) {
     let inv = Object.entries(collection);
     let sample = inv[Math.random()*inv.length|0]
     if (Array.isArray(collection)) {
@@ -1052,8 +970,7 @@ var qpumpkin = {
       return {[sample[0]] : sample[1]};
     }
   },
-  sampleSize:
-  function sampleSize(collection,n=1) {
+  sampleSize: function (collection,n=1) {
     const inv = new Set();
     const keys = Object.keys(collection);
     n = n<=keys.length ? n : keys.length;
@@ -1073,8 +990,7 @@ var qpumpkin = {
     }
     return result;
   },
-  shuffle:
-  function shuffle(collection) {
+  shuffle: function (collection) {
     let result = collection.slice();
     for (let i=result.length-1; i>0; i--) {
       const rand = Math.random() * i | 0;
@@ -1082,12 +998,10 @@ var qpumpkin = {
     }
     return result;
   },
-  size:
-  function size(collection) {
+  size: function (collection) {
     return Object.keys(collection).length;
   },
-  some:
-  function some(collection,predicate) {
+  some: function (collection,predicate) {
     predicate = this.iteratee(predicate);
     for (const key in collection) {
       if (predicate(collection[key])) {
@@ -1096,8 +1010,7 @@ var qpumpkin = {
     }
     return false;
   },
-  sortBy:
-  function sortBy(collection,iteratees) {
+  sortBy: function (collection,iteratees) {
     const result = collection.slice();
     const iters = iteratees.map(ele => this.iteratee(ele));
     result.sort(function (pre,after) {
@@ -1114,8 +1027,7 @@ var qpumpkin = {
     });
     return result;
   },
-  castArray:
-  function castArray(value) {
+  castArray: function (value) {
     if (Array.isArray(value)) {
       return value;
     } else if (arguments.length === 0) {
@@ -1124,8 +1036,7 @@ var qpumpkin = {
       return [value];
     }
   },
-  conformsTo:
-  function conformsTo(object,source) {
+  conformsTo: function (object,source) {
     for (let key in source) {
       if (!source[key](object[key])) {
         return false;
@@ -1133,8 +1044,7 @@ var qpumpkin = {
     }
     return true;
   },
-  eq:
-  function eq(object,other) {
+  eq: function (object,other) {
     if (object != object) {
       return other != other;
     } else {
@@ -1145,62 +1055,48 @@ var qpumpkin = {
       }
     }
   },
-  gt:
-  function gt(value,other) {
+  gt: function (value,other) {
     return value > other;
   },
-  gte:
-  function gte(value,other) {
+  gte: function (value,other) {
     return value >= other;
   },
-  isArguments:
-  function isArguments(value) {
+  isArguments: function (value) {
     return Object.prototype.toString.call(value) === "[object Arguments]";
   },
-  isArray:
-  function isArray(value) {
+  isArray: function (value) {
     return Object.prototype.toString.call(value) === "[object Array]";
   },
-  isArrayBuffer:
-  function isArrayBuffer(value) {
+  isArrayBuffer: function (value) {
     return Object.prototype.toString.call(value) === "[object ArrayBuffer]";
   },
-  isArrayLike:
-  function isArrayLike(value) {
+  isArrayLike: function (value) {
     return typeof value != "function" && value.hasOwnProperty("length");
   },
-  isArrayLikeObject:
-  function isArrayLikeObject(value) {
+  isArrayLikeObject: function (value) {
     return typeof value === 'object' && value.hasOwnProperty("length");
   },
-  isBoolean:
-  function isBoolean(value) {
+  isBoolean: function (value) {
     return Object.prototype.toString.call(value) === "[object Boolean]";
   },
-  isDate:
-  function isDate(value) {
+  isDate: function (value) {
     return Object.prototype.toString.call(value) === '[object Date]';
   },
-  isElement:
-  function isElement(value) {
+  isElement: function (value) {
     return value !== null && typeof value === 'object' && value.nodeType === 1;
   },
-  isEmpty:
-  function isEmpty(value) {
+  isEmpty: function (value) {
     return this.isNil(value) || Object.values(value).length===0;
   },
-  isNil:
-  function isNil(value) {
+  isNil: function (value) {
     return value===null || value===undefined;
   },
-  negate:
-  function negate(predicate) {
+  negate: function (predicate) {
     return function(...args) {
       return !predicate(...args);
     }
   },
-  isEqual:
-  function isEqual(value,other) {
+  isEqual: function (value,other) {
     if (value === other) {
       return true;
     } else if (value instanceof Object && other instanceof Object) {
@@ -1225,8 +1121,7 @@ var qpumpkin = {
         return false;
     }
   },
-  isEqualWith:
-  function isEqualWith(value,other,customizer) {
+  isEqualWith: function (value,other,customizer) {
     if (typeof value != typeof other) {
       return false;
     } else if (typeof value=="string" || typeof value=="number") {
@@ -1246,37 +1141,29 @@ var qpumpkin = {
       });
     }
   },
-  isError:
-  function isError(value) {
+  isError: function (value) {
     return value instanceof Error;
   },
-  isFinite:
-  function isFinite(value) {
+  isFinite: function (value) {
     return Number.isFinite(value);
   },
-  isFunction:
-  function isFunction(value) {
+  isFunction: function (value) {
     return typeof value === "function";
   },
-  isInteger:
-  function isInteger(value) {
+  isInteger: function (value) {
     return Number.isInteger(value);
   },
-  isLength:
-  function isLength(value) {
+  isLength: function (value) {
     return value === this.toLength(value);
   },
-  isMap:
-  function isMap(value) {
+  isMap: function (value) {
     return Object.prototype.toString.call(value) === "[object Map]";
   },
-  isMatch:
-  function isMatch(object,source) {
+  isMatch: function (object,source) {
     let predicate = this.matches(source);
     return predicate(object);
   },
-  isMatchWith:
-  function isMatchWith(object,source,customizer) {
+  isMatchWith: function (object,source,customizer) {
     for (const key in object) {
       const flag = customizer(object[key],source[key],key,key,object,source);
       if (!flag) {
@@ -1287,85 +1174,66 @@ var qpumpkin = {
     }
     return true;
   },
-  isNaN:
-  function isNaN(value) {
+  isNaN: function (value) {
     return Object.prototype.toString.call(value)==="[object Number]" && window.isNaN(value);
   },
-  isNative:
-  function isNative(value) {
+  isNative: function (value) {
     return value.toString().includes("[native code]");
   },
-  isNumber:
-  function isNumber(value) {
+  isNumber: function (value) {
     return Object.prototype.toString.call(value) === "[object Number]";
   },
-  isObject:
-  function isObject(value) {
+  isObject: function (value) {
     return value!==null || typeof value==="undefined" || typeof value==="function";
   },
-  isObjectLike:
-  function isObjectLike(value) {
+  isObjectLike: function (value) {
     return value!==null && typeof value==="object";
   },
-  isPlainObject:
-  function isPlainObject(value) {
+  isPlainObject: function (value) {
     return typeof value==="object" && (value.__proto__===Object.prototype||value.__proto__===undefined);
   },
-  isRegExp:
-  function isRegExp(value) {
+  isRegExp: function (value) {
      return Object.prototype.toString.call(value) === "[object RegExp]";
   },
-  isSafeInteger:
-  function isSafeInteger(value) {
+  isSafeInteger: function (value) {
     return Number.isSafeInteger(value);
   },
-  isSet:
-  function isSet(value) {
+  isSet: function (value) {
     return Object.prototype.toString.call(value) === "[object Set]";
   },
-  isString:
-  function isString(value) {
+  isString: function (value) {
     return Object.prototype.toString.call(value) === "[object String]";
   },
-  isSymbol:
-  function isSymbol(value) {
+  isSymbol: function (value) {
     return typeof value === "symbol";
   },
-  isTypedArray:
-  function isTypedArray(value) {
+  isTypedArray: function (value) {
     const type = Object.prototype.toString.call(value);
     return type.includes("Array") && type.length>14;
   },
-  isUndefined:
-  function isUndefined(value) {
+  isUndefined: function (value) {
     return value === undefined;
   },
-  isWeakMap:
-  function isWeakMap(value) {
+  isWeakMap: function (value) {
     return Object.prototype.toString.call(value) == "[object WeakMap]";
   },
-  isWeakSet:
-  function isWeakMap(value) {
+  isWeakSet: function (value) {
     return Object.prototype.toString.call(value) == "[object WeakSet]";
   },
-  lt:
-  function lt(value,other) {
+  lt: function (value,other) {
     return value<other;
   },
-  lte:
-  function lte(value,other) {
+  lte: function (value,other) {
     return value<=other;
   },
-  toArray:
-  function toArray(value) {
+  toArray: function (value) {
     if (value===null || value===undefined) {
       return [];
     } else {
       return Object.values(value);
     }
   }, 
-  toFinite:
-  function toFinite(value) {
+  toFinite: function (value) {
     if (value === Infinity) {
       return Number.MAX_VALUE; 
     } else if (value === -Infinity) {
@@ -1375,16 +1243,14 @@ var qpumpkin = {
       return isNaN(result) ? 0 : result;
     }
   },
-  toInteger:
-  function toInteger(value) {
+  toInteger: function (value) {
     if (value === undefined) {
       return Number.MAX_SAFE_INTEGER;
     }
     const result = this.toFinite(value);
     return result | 0;
   },
-  toLength:
-  function toLength(value) {
+  toLength: function (value) {
     if (value < 0 || isNaN(value)) {
       return 0;
     } else if (value === Infinity) {
@@ -1393,12 +1259,10 @@ var qpumpkin = {
       return value | 0;
     }
   },
-  toNumber:
-  function toNumber(value) {
+  toNumber: function (value) {
     return Number(value);
   },
-  assign:
-  function assign(object,...sources) {
+  assign: function (object,...sources) {
     return sources.reduce(function (res,cur) {
       const infos = Object.entries(cur);
       for (const i in infos) {
@@ -1408,8 +1272,7 @@ var qpumpkin = {
       return res;
     },object);
   },
-  toSafeInteger:
-  function toSafeInteger(value) {
+  toSafeInteger: function (value) {
     if (isNaN(value)) {
       return 9007199254740991;
     } else {
@@ -1423,34 +1286,28 @@ var qpumpkin = {
       return 9007199254740991;
     }
   },
-  add:
-  function add(augend,addend) {
+  add: function (augend,addend) {
     return augend + addend;
   },
-  ceil:
-  function ceil(number,precision=0) {
+  ceil: function (number,precision=0) {
     const multiple = 10 ** precision;
     return Math.ceil(number*multiple) / multiple;
   },
-  divide:
-  function divide(dividend,divisor) {
+  divide: function (dividend,divisor) {
     return dividend/divisor;
   },
-  floor:
-  function floor(number,precision=0) {
+  floor: function (number,precision=0) {
     const multiple = 10 ** precision;
     return Math.floor(number*multiple) / multiple;
   },
-  max:
-  function max(array) {
+  max: function (array) {
     if (this.isEmpty(array)) {
       return undefined;
     } else {
       return Math.max(...array);
     }
   },
-  maxBy:
-  function maxBy(array,iteratee=this.identity) {
+  maxBy: function (array,iteratee=this.identity) {
     const cvt = this.iteratee(iteratee);
     const tIdx = array.reduce(function (acc,cur,idx) {
       const comp = cvt(cur);
@@ -1463,25 +1320,21 @@ var qpumpkin = {
     
     return array[tIdx];
   },
-  mean:
-  function mean(array) {
+  mean: function (array) {
     return this.sum(array) / array.length;
   },
-  meanBy:
-  function meanBy(array,iteratee=this.identity) {
+  meanBy: function (array,iteratee=this.identity) {
     const cvt = this.iteratee(iteratee);
     return array.reduce((acc,cur) => acc+cvt(cur),0) / array.length;
   },
-  min:
-  function min(array) {
+  min: function (array) {
     if (this.isEmpty(array)) {
       return undefined;
     } else {
       return Math.min(...array);
     }
   },
-  minBy:
-  function minBy(array,iteratee=this.identity) {
+  minBy: function (array,iteratee=this.identity) {
     const cvt = this.iteratee(iteratee);
     const tIdx = array.reduce(function (acc,cur,idx) {
       const comp = cvt(cur);
@@ -1494,30 +1347,24 @@ var qpumpkin = {
 
     return array[tIdx];
   },
-  multiply:
-  function multiply(mtr,mtd) {
+  multiply: function (mtr,mtd) {
     return mtr * mtd;
   },
-  round:
-  function round(number,precision=0) {
+  round: function (number,precision=0) {
     const mtp = 10 ** precision;
     return Math.round(number*mtp) / mtp;
   },
-  subtract:
-  function subtract(minuend,subtrahend) {
+  subtract: function (minuend,subtrahend) {
     return minuend - subtrahend;
   },
-  sum:
-  function sum(array) {
+  sum: function (array) {
     return array.reduce((acc,cur) => acc+cur,0);
   },
-  sumBy:
-  function sumBy(array,iteratee=this.identity) {
+  sumBy: function (array,iteratee=this.identity) {
     const cvt = this.iteratee(iteratee);
     return array.reduce((acc,cur) => acc+cvt(cur),0);
   },
-  clamp:
-  function clamp(number,lower,upper) {
+  clamp: function (number,lower,upper) {
     if (number > upper) {
       return upper;
     } else if (number < lower) {
@@ -1526,8 +1373,7 @@ var qpumpkin = {
       return number;
     }
   },
-  inRange:
-  function inRange(number,start=0,end) {
+  inRange: function (number,start=0,end) {
     if (end == undefined) {
       end = start;
       start = 0;
@@ -1537,8 +1383,7 @@ var qpumpkin = {
     }
     return number>start && number<end;
   },
-  random:
-  function random(...args) {
+  random: function (...args) {
     const rand = Math.random();
     if (args.length === 1) {
       const result = rand * args[i];
@@ -1561,8 +1406,7 @@ var qpumpkin = {
       return float ? result : Math.round(result);
     }
   },
-  assignIn:
-  function assignIn(object,...sources) {
+  assignIn: function (object,...sources) {
     return sources.reduce(function (res,cur) {
       for (const key in cur) {
         res[key] = cur[key];
@@ -1570,8 +1414,7 @@ var qpumpkin = {
       return res;
     },object);
   },
-  at:
-  function at(object,paths) {
+  at: function (object,paths) {
     const result = [];
     paths.forEach(function (path) {
       let val = object;
@@ -1584,8 +1427,7 @@ var qpumpkin = {
     });
     return result;
   },
-  defaults:
-  function defaults(object,...sources) {
+  defaults: function (object,...sources) {
     return sources.reduce(function (res,cur) {
       for (const key in cur) {
         if (res[key] === undefined) {
@@ -1595,8 +1437,7 @@ var qpumpkin = {
       return res;
     },object);
   },
-  defaultsDeep:
-  function defaultsDeep(object,...sources) {
+  defaultsDeep: function (object,...sources) {
     return sources.reduce(function (res,cur) {
       let node = res;
       for (const key in cur) {
@@ -1612,8 +1453,7 @@ var qpumpkin = {
       return res;
     },object)
   },
-  findKey:
-  function findKey(object,predicate) {
+  findKey: function (object,predicate) {
     predicate = this.iteratee(predicate);
     for (const key in object) {
       if (predicate(object[key])) {
@@ -1622,8 +1462,7 @@ var qpumpkin = {
     }
     return undefined
   },
-  findLastKey:
-  function findLastKey(object,predicate) {
+  findLastKey: function (object,predicate) {
     predicate = this.iteratee(predicate);
     const keys = Object.keys(object);
     for (let i=keys.length-1; i>=0; i--) {
@@ -1634,8 +1473,7 @@ var qpumpkin = {
     }
     return undefined;
   },
-  forIn:
-  function forIn(object,func=this.identity) {
+  forIn: function (object,func=this.identity) {
     for (const key in object) {
       if (func(object[key],key,object) === false) {
         return object;
@@ -1643,8 +1481,7 @@ var qpumpkin = {
     }
     return object;
   },
-  forInRight:
-  function forInRight(object,func=this.identity) {
+  forInRight: function (object,func=this.identity) {
     const keys = [];
     for (const key in object) {
       keys.push(key);
@@ -1657,8 +1494,7 @@ var qpumpkin = {
     }
     return object;
   },
-  forOwn:
-  function forOwn(object,func=this.identity) {
+  forOwn: function (object,func=this.identity) {
     const keys = Object.keys(object);
     for (let i=0; i<keys.length; i++) {
       const key = keys[i];
@@ -1668,8 +1504,7 @@ var qpumpkin = {
     }
     return object;
   },
-  forOwnRight:
-  function forOwnRight(object, func=this.identity) {
+  forOwnRight: function (object, func=this.identity) {
     const keys = Object.keys(object);
     for (let i=keys.length-1; i>=0; i--) {
       const key = keys[i];
@@ -1679,20 +1514,17 @@ var qpumpkin = {
     }
     return object;
   },
-  functions:
-  function functions(object) {
+  functions: function (object) {
     return Object.keys(object);
   },
-  functionsIn:
-  function functionsIn(object) {
+  functionsIn: function (object) {
     const keys = [];
     for (const key in object) {
       keys.push(key);
     }
     return keys;
   },
-  get:
-  function get(object,path,dftVal) {
+  get: function (object,path,dftVal) {
     if (typeof path === "string") {
       path = path.split(/\.|\[|\]/g);
     }
@@ -1708,8 +1540,7 @@ var qpumpkin = {
     }
     return node;
   },
-  has:
-  function has(object,path) {
+  has: function (object,path) {
     if (typeof path === "string") {
       path = path.split(/\.|\[|\]/g);
     }
@@ -1724,8 +1555,7 @@ var qpumpkin = {
     }
     return true;
   },
-  hasIn:
-  function hasIn(object,path) {
+  hasIn: function (object,path) {
     if (typeof path === "string") {
       path = path.split(/\.|\[|\]/g);
     }
@@ -1741,15 +1571,13 @@ var qpumpkin = {
     }
     return true;
   },
-  invert:
-  function invert(obj) {
+  invert: function (obj) {
     const res = {};
     const keys = Object.keys(obj);
     keys.forEach(key => res[obj[key]]=key);
     return res;
   },
-  invertBy:
-  function invertBy(obj,iter=this.identity) {
+  invertBy: function (obj,iter=this.identity) {
     iter = this.iteratee(iter);
     const res = {};
     const keys = Object.keys(obj);
@@ -1763,27 +1591,23 @@ var qpumpkin = {
     });
     return res;
   },
-  invoke:
-  function invoke(obj, path, ...args) {
+  invoke: function (obj, path, ...args) {
     path = path.split(/\.|\[|\]/g);
     const func = path.pop();
     const tar = this.get(obj, path);
     return tar === undefined ? tar : tar[func](...args);
   },
-  keys:
-  function keys(obj) {
+  keys: function (obj) {
     return Object.keys(obj);
   },
-  keysIn:
-  function keysIn(obj) {
+  keysIn: function (obj) {
     const res = [];
     for (const key in obj) {
       res.push(key);
     }
     return res;
   },
-  mapKeys:
-  function mapKeys(obj,iter=this.identity) {
+  mapKeys: function (obj,iter=this.identity) {
     iter = this.iteratee(iter);
     const res = {};
     const entries = Object.entries(obj);
@@ -1794,8 +1618,7 @@ var qpumpkin = {
     }
     return res;
   },
-  mapValues:
-  function mapValues(obj,iter=this.identity) {
+  mapValues: function (obj,iter=this.identity) {
     iter = this.iteratee(iter);
     const res = {};
     const entries = Object.entries(obj);
@@ -1806,8 +1629,7 @@ var qpumpkin = {
     }
     return res;
   },
-  merge:
-  function merge(obj,...src) {
+  merge: function (obj,...src) {
     for (let i=0; i<src.length; i++) {
       const cur = src[i];
       for (const key in cur) {
@@ -1822,8 +1644,7 @@ var qpumpkin = {
     }
     return obj;
   },
-  mergeWith:
-  function mergeWith(obj,...other) {
+  mergeWith: function (obj,...other) {
     const customizer = other.pop();
     for (let i=0; i<other.length; i++) {
       const cur = other[i];
@@ -1838,8 +1659,7 @@ var qpumpkin = {
     }
     return obj;
   },
-  omit:
-  function omit(obj,paths) {
+  omit: function (obj,paths) {
     const res = {};
     const map = new Set(paths);
     for (const key in obj) {
@@ -1849,8 +1669,7 @@ var qpumpkin = {
     }
     return res;
   },
-  omitBy:
-  function omitBy(obj,predicate=this.identity) {
+  omitBy: function (obj,predicate=this.identity) {
     const res = {};
     for (const key in obj) {
       if (!predicate(obj[key],key)) {
@@ -1859,22 +1678,19 @@ var qpumpkin = {
     }
     return res;
   },
-  pick:
-  function pick(obj,paths) {
+  pick: function (obj,paths) {
     const map = new Set(paths);
     const res = {};
     Object.keys(obj).forEach(key => map.has(key) && (res[key]=obj[key]));
     return res;
   },
-  pickBy:
-  function pickBy(obj,predicate=this.identity) {
+  pickBy: function (obj,predicate=this.identity) {
     const res = {};
     Object.entries(obj)
     .forEach(info => predicate(info[1],info[0]) && (res[info[0]]=info[1]));
     return res;
   },
-  result:
-  function result(obj,path,dftVal) {
+  result: function (obj,path,dftVal) {
     if (typeof path === "string") {
       path = path.split(/\.|\[|\]/g);
     }
@@ -1920,28 +1736,23 @@ var qpumpkin = {
   //   }
   // },
   values: Object.values,
-  valuesIn: 
-  function valuesIn(obj) {
+  valuesIn: function (obj) {
     const res = [];
     for (const key in obj) {
       res.push(obj[key]);
     }
     return res;
   },
-  camelCase:
-  function camelCase(string="") {
+  camelCase: function (string="") {
     return string.replace(/-|_/g,"");
   },
-  capitalize:
-  function capitalize(string="") {
+  capitalize: function (string="") {
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
   },
-  endWith:
-  function endWith(string,target,pos=string.length) {
+  endWith: function (string,target,pos=string.length) {
     return string.slice(pos-1).indexOf(target) !== -1;
   },
-  escape:
-  function escape(string="") {
+  escape: function (string="") {
     const objStr = Object(string);    
     const map = new Map(
       [["&",'&amp;'],["<",'&lt;'],[">",'&gt;'],['"','&quot;'],["'",'&#39;']]
@@ -1957,15 +1768,14 @@ var qpumpkin = {
     }
     return res;
   },
-  escapeRegExp:
-  function escapeRegExp(string="") {
+  escapeRegExp: function (string="") {
     const objStr = Object(string);
     const map = new Set(["^","$","",".","*","+","?","(",")","[","]","{","}","|"]);
     let res = "";
     for (let i = 0; i < objStr.length; i++) {
       const cur = objStr[i];
       if (map.has(cur)) {
-        res += ("//" + cur);
+        res += ("\\" + cur);
       } else {
         res += cur;
       }
@@ -1984,25 +1794,21 @@ var qpumpkin = {
   // function mixin(object=this,source,option={}) {
 
   // },
-  times:
-  function times(n,iter=this.identity) {
+  times: function (n,iter=this.identity) {
     const res = [];
     for (let i=0; i<n; i++) {
       res.push(iter(i));
     }
     return res;
   },
-  toPath:
-  function toPath(value) {
+  toPath: function (value) {
     return typeof value === 'object' ? value : value.match(/[a-z0-9]+/gi);
   },
-  uniqueId:
-  function uniqueId(prefix="") {
+  uniqueId: function (prefix="") {
     const Id = ++idCount;
     return String(prefix) + Id;
   },
-  cloneDeep:
-  function cloneDeep(value) {
+  cloneDeep: function (value) {
     if (typeof value!=="object" || value === null) {
       return value;
     } else {
@@ -2013,31 +1819,25 @@ var qpumpkin = {
       return res;
     }
   },
-  property:
-  function property(path) {
+  property: function (path) {
     return obj => this.get(obj,path);
   },
-  ary:
-  function ary(func,n=func.length) {
+  ary: function (func,n=func.length) {
     return (...args) => func.apply(null,args.slice(0,n));
   },
-  unary:
-  function unary(func) {
+  unary: function (func) {
     return arg => func(arg);
   },
-  once:
-  function once(func) {
+  once: function (func) {
     let save;
     return (...args) => save!==undefined
                       ? save
                       : func.apply(null,args);
   },
-  spread:
-  function spread(func,start=0) {
+  spread: function (func,start=0) {
     return args => func.apply(this,args.slice(start));
   },
-  curry:
-  function curry(func,arity=func.length) {
+  curry: function (func,arity=func.length) {
     const paras = [];//储存参数。
     const empty = [];//储存空缺参数的位置。
 
@@ -2077,31 +1877,28 @@ var qpumpkin = {
   //     return func(obj)
   //   }.bind(memoize);
   // },
-  flip:
-  function flip(func) {
-    return (...args) => func(args.reverse());
+  flip: function (func) {
+    return (...args) => func(...args.reverse());
   },
-  conforms:
-  function conforms(source) {
+  conforms: function (source) {
     return obj => Object.keys(source)
     .every(key => this.iteratee(source[key])(obj[key]));
   },
-  flow:
-  function flow(funcs) {
-    return (...args) => funcs.reduce(
-      (acc,func,idx) => idx===0 ? func(...args) : func(acc)
-    )
+  constant: function (value) {
+    return (...any) => value;
   },
-  method:
-  function method(path,...args) {
+  flow: function (funcs) {
+    return (...args) => funcs.reduce(
+      (acc,func,idx) => func(...args)
+    ,funcs.shift()(...args));
+  },
+  method: function (path,...args) {
     return obj => this.get(obj,path)(...args);
   },
-  methodOf:
-  function methodOf(obj,...args) {
+  methodOf: function (obj,...args) {
     return path => this.get(obj,path)(...args);
   },
-  nthArg:
-  function nthArg(n) {
+  nthArg: function (n) {
     return (...args) => n>0 ? args[n] : args[args.length+n]; 
   },
   // propertyOf:
@@ -2110,12 +1907,10 @@ var qpumpkin = {
 
   //   }
   // },
-  identity:
-  function identity(value) {
+  identity: function (value) {
     return value;
   },
-  bind:
-  function bind(func, thisArg, ...partials) {
+  bind: function (func, thisArg, ...partials) {
     return function (...arg) {
       let args = [];
       let index = 0;
@@ -2133,8 +1928,7 @@ var qpumpkin = {
     }
   },
   /*-------------------tool-------------------*/
-  iteratee:
-  function iteratee(value) {
+  iteratee: function (value) {
     if (value instanceof Function) {
       return value;
     } else if (value instanceof Array) {
@@ -2167,12 +1961,10 @@ var qpumpkin = {
       };
     }
   },
-  matchesProperty:
-  function matchesProperty(key,value) {
+  matchesProperty: function (key,value) {
     return object => this.isEqual(object[key],value);
   },
-  matches:
-  function matches(source) {
+  matches: function (source) {
     return value => {
       let predicate;
       for (key in source) {
@@ -2185,8 +1977,7 @@ var qpumpkin = {
       return true;
     }
   },
-  remove:
-  function remove(array,predicate) {
+  remove: function (array,predicate) {
     predicate = this.iteratee(predicate);
     let out = [];
     let saveIndex = [];
