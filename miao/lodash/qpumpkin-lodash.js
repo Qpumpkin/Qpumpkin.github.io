@@ -1787,19 +1787,95 @@ var qpumpkin = {
   },
   // kebabCase:
   // function kebabCase(string) {
-
   // },
   // toLowerCase:
   // function toLowerCase() {
-
   // },
   // mixin:
   // function mixin(object=this,source,option={}) {
-
   // },
+  pad: function (str="",len=0,chars=" ") {
+
+  },
+  parseInt: function () {
+
+  },
+  repeat: function (str="",n=1) {
+    let res = "";
+    for (let i=0; i<n; i++) {
+      res += str;
+    }
+    return res;
+  },
+  replace: (str= '',pattern,replacement) => str.replace(pattern,replacement),
+  snakeCase: (strs="") => this.words(strs)
+                        .map(str => str.toLowerCase())
+                        .join("_"),
+  split: (str="",sep,lim) => String.prototype.split.call(str,sep,lim),
+  startCase: string => this.words(string)
+                      .map(str => this.upperFirst(str))
+                      .join(" "),
+  startWith: function(string="",target,pos=0) {
+    return string[pos] === target;
+  },
   toLower: str => String.prototype.toLowerCase.call(str),
   toUpper: str => String.prototype.toUpperCase.call(str),
-  // truncate: function () {},
+  trim: function (string="",chars=" ") {
+    let te = this.trimEnd(string, chars)
+    return this.trimStart(this.trimEnd(string,chars),chars);
+  },
+  trimEnd: function (string="",chars=" ") {
+    const map = new Set(chars);
+    const objStr = Object(string);
+    let cut;
+    for (let i=objStr.length-1; i>=0; i--) {
+      if (!map.has(objStr[i])) {
+        cut = i + 1;
+        return string.slice(0,cut);
+      }
+    }
+    return string;
+  },
+  trimStart: function (string="",chars=" ") {
+    const map = new Set(chars);
+    const objStr = Object(string);
+    const end = objStr.length;
+    let cut;
+    for (let i=0; i<end; i++) {
+      if (!map.has(objStr[i])) {
+        cut = i;
+        return string.slice(cut);
+      }
+    }
+    return string;
+  },
+  truncate: function (str="",opt={}) {
+    const len = opt.length === undefined ? 30 : opt.length;
+    const omi = opt.omission === undefined ? "..." : opt.omission;
+    if (str.length < len) {
+      return str;
+    } else {
+      let res = str.slice(0, len);
+      if (opt.separator !== undefined) {
+        const sep = opt.separator;
+        if (typeof sep === "string") {
+          const cut = res.lastIndexOf(sep);
+          return res.slice(0, cut) + omi;
+        } else {
+          const reg = new RegExp(sep, "g");
+          let lastIdx = 0;
+          let info = reg.exec(res);
+          do {
+            lastIdx = info.index;
+            info = reg.exec(res);
+          } while (info);
+          return res.slice(0, lastIdx) + omi;
+        }
+      } else {
+        return res.slice(0, -omi.length) + omi;
+      }
+    }
+  },
   unescape: function (string=""){
     const objStr = Object(string);
     const map = new Map([
@@ -1810,10 +1886,17 @@ var qpumpkin = {
       ['&#39;',"'"]
     ]);
     let res = "";
-    for (let i=0; i<objStr.length; i++) {
-      const cur = objStr[i];
-      if (map.has(cur)) {
-        res += map.get(cur);
+    let escape = "&";
+    for (let i=0; i<objStr.length; i++) {//【i】指字符串当前的位置，会在两个循环内用到。
+      const cur = objStr[i];//指当前正在处理的单个字符，会在多种情况使用。
+      if (cur === "&") {
+        do {
+          i += 1;
+          cur = objStr[i];
+          escape += cur;
+        } while (cur !== ";");
+        escape = "&";
+        res += escape;
       } else {
         res += cur;
       }
@@ -1828,7 +1911,7 @@ var qpumpkin = {
   upperFirst: function (string="") {
     return string[0].toUpperCase() + string.slice(1);
   },
-  words: function (string="",pattern=/[\w\d]+/g) {
+  words: function (string="",pattern=/[A-Z]?[a-z]+|[A-Z]+/g) {
     return string.match(pattern);
   },
   defaultTo: function (value,dftVal) {
