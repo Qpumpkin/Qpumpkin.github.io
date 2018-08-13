@@ -2026,7 +2026,7 @@ var qpumpkin = {
   },
   once:
   function once(func) {
-    const save;
+    let save;
     return (...args) => save!==undefined
                       ? save
                       : func.apply(this,args);
