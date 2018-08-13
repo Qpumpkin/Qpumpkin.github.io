@@ -1747,7 +1747,8 @@ var qpumpkin = {
     return res;
   },
   camelCase: function (string="") {
-    return string.replace(/-|_/g,"");
+    var words = this.words(string)
+    return words.reduce((acc, cur) => acc + this.capitalize(cur), words.shift().toLowerCase())
   },
   capitalize: function (string="") {
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
