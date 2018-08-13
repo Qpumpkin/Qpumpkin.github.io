@@ -1091,6 +1091,9 @@ var qpumpkin = {
   isNil: function (value) {
     return value===null || value===undefined;
   },
+  isNull: function (value) {
+    return value === null;
+  },
   negate: function (predicate) {
     return function(...args) {
       return !predicate(...args);
@@ -1445,7 +1448,7 @@ var qpumpkin = {
           if (node[key] == undefined) {
             node[key] = {};
           };
-          defaultsDeep(node[key],cur[key]);
+          this.defaultsDeep(node[key],cur[key]);
         } else if (res[key] === undefined) {
           node[key] = cur[key];
         }
@@ -1794,6 +1797,40 @@ var qpumpkin = {
   // function mixin(object=this,source,option={}) {
 
   // },
+  toLower: str => String.prototype.toLowerCase.call(str),
+  toUpper: str => String.prototype.toUpperCase.call(str),
+  // truncate: function () {},
+  unescape: function (string=""){
+    const objStr = Object(string);
+    const map = new Map([
+      ['&amp;','&'],
+      ['&lt;','<'],
+      ['&gt;','>'],
+      ['&quot;','"'],
+      ['&#39;',"'"]
+    ]);
+    let res = "";
+    for (let i=0; i<objStr.length; i++) {
+      const cur = objStr[i];
+      if (map.has(cur)) {
+        res += map.get(cur);
+      } else {
+        res += cur;
+      }
+    }
+    return res;
+  },
+  upperCase: function (string="") {
+    return this.words(string)
+          .map(str => str.toUpperCase())
+          .join(" ");
+  },
+  upperFirst: function (string="") {
+    return string[0].toUpperCase() + string.slice(1);
+  },
+  words: function (string="",pattern=/[\w\d]+/g) {
+    return string.match(pattern);
+  },
   defaultTo: function (value,dftVal) {
     return isNaN(value)&&value!==null ? dftVal : value;
   },
