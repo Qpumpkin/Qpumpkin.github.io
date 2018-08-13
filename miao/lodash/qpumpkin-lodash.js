@@ -1715,11 +1715,9 @@ var qpumpkin = {
   },
   // set:
   // function set(obj,path,) {
-
   // },
   // setWith:
   // function setWith(obj,path,value,customizer) {
-
   // },
   // updateWith:
   // function updateWith(obj,path,update,customizer=this.identity) {
@@ -1795,12 +1793,10 @@ var qpumpkin = {
   // mixin:
   // function mixin(object=this,source,option={}) {
   // },
-  pad: function (str="",len=0,chars=" ") {
-
-  },
-  parseInt: function () {
-
-  },
+  // pad: function (str="",len=0,chars=" ") {
+  // },
+  // parseInt: function () {
+  // },
   repeat: function (str="",n=1) {
     let res = "";
     for (let i=0; i<n; i++) {
@@ -1809,30 +1805,29 @@ var qpumpkin = {
     return res;
   },
   replace: (str= '',pattern,replacement) => str.replace(pattern,replacement),
-  snakeCase: (strs="") => this.words(strs)
-                        .map(str => str.toLowerCase())
-                        .join("_"),
+  snakeCase: function (strs = "") {//因为调用了【this】所以不能用箭头函数
+    return this.words(strs)
+      .map(str => str.toLowerCase())
+      .join("_");
+  },
   split: (str="",sep,lim) => String.prototype.split.call(str,sep,lim),
-  startCase: string => this.words(string)
-                      .map(str => this.upperFirst(str))
-                      .join(" "),
+  startCase: function (string) {
+    return this.words(string).map(str => this.upperFirst(str)).join(" ");
+  },
   startWith: function(string="",target,pos=0) {
     return string[pos] === target;
   },
   toLower: str => String.prototype.toLowerCase.call(str),
   toUpper: str => String.prototype.toUpperCase.call(str),
   trim: function (string="",chars=" ") {
-    let te = this.trimEnd(string, chars)
     return this.trimStart(this.trimEnd(string,chars),chars);
   },
   trimEnd: function (string="",chars=" ") {
     const map = new Set(chars);
     const objStr = Object(string);
-    let cut;
     for (let i=objStr.length-1; i>=0; i--) {
       if (!map.has(objStr[i])) {
-        cut = i + 1;
-        return string.slice(0,cut);
+        return string.slice(0,i+1);
       }
     }
     return string;
@@ -1841,11 +1836,9 @@ var qpumpkin = {
     const map = new Set(chars);
     const objStr = Object(string);
     const end = objStr.length;
-    let cut;
     for (let i=0; i<end; i++) {
       if (!map.has(objStr[i])) {
-        cut = i;
-        return string.slice(cut);
+        return string.slice(i);
       }
     }
     return string;
@@ -2020,7 +2013,6 @@ var qpumpkin = {
   },
   // memoize:
   // function memoize(func,resolver) {
-    
   //   return function (obj) {
   //     return func(obj)
   //   }.bind(memoize);
