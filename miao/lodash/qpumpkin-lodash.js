@@ -1454,7 +1454,7 @@ var qpumpkin = {
         }
       }
       return res;
-    }.bind(this),object);//是在【sources】的reduce函数中，且传入的函数内部调用了【lodash】中的函数，在传的时候先绑定this。
+    }.bind(this),object);//是在【sources】的reduce函数中，且传入的函数内部调用了【lodash】中的函数并且还会递归，在传的时候先绑定this。
   },
   findKey: function (object,predicate) {
     predicate = this.iteratee(predicate);
@@ -1805,7 +1805,7 @@ var qpumpkin = {
     return res;
   },
   replace: (str= '',pattern,replacement) => str.replace(pattern,replacement),
-  snakeCase: function (strs = "") {//因为调用了【this】所以不能用箭头函数
+  snakeCase: function (strs = "") {//因为使用了【this】所以不能用箭头函数
     return this.words(strs)
       .map(str => str.toLowerCase())
       .join("_");
@@ -1819,10 +1819,10 @@ var qpumpkin = {
   },
   toLower: str => String.prototype.toLowerCase.call(str),
   toUpper: str => String.prototype.toUpperCase.call(str),
-  trim: function (string="",chars=" ") {
+  trim: function (string="",chars=" 　") {
     return this.trimStart(this.trimEnd(string,chars),chars);
   },
-  trimEnd: function (string="",chars=" ") {
+  trimEnd: function (string="",chars=" 　") {
     const map = new Set(chars);
     const objStr = Object(string);
     for (let i=objStr.length-1; i>=0; i--) {
@@ -1832,7 +1832,7 @@ var qpumpkin = {
     }
     return string;
   },
-  trimStart: function (string="",chars=" ") {
+  trimStart: function (string="",chars=" 　") {
     const map = new Set(chars);
     const objStr = Object(string);
     const end = objStr.length;
@@ -2134,9 +2134,32 @@ var qpumpkin = {
     array.length = saveIndex.length;
     return out;
   },
-  // reduce:
-  // function reduce(collection,func,accumulator) {
-  // },
+  reduce: function (collection,iter=this.identity,acc) {
+    const infos = Object.entries(collection);
+    iter = this.iteratee(iter);
+    let start = 0;
+    if (acc === undefined) {
+      acc = infos[0][1];
+      start = 1;
+    }
+    for (let i=start; i<infos.length; i++) {
+      acc = iter(acc,infos[i][1],infos[i][0],collection);
+    }
+    return acc;
+  },
+  reduceRight: function (collection,iter=this.identity,acc) {
+    const infos = Object.entries(collection);
+    iter = this.iteratee(iter);
+    let start = infos.length - 1;
+    if (acc === undefined) {
+      acc = infos[start][1];
+      start -= 1;
+    }
+    for (let i=start; i>=0; i--) {
+      acc = iter(acc,infos[i][1],infos[i][0],collection);
+    }
+    return acc;
+  }
 };
 function sliceArray(array,begin=0,end=array.length,step=1) {
   let out = []
