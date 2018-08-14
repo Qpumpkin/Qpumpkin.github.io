@@ -1454,7 +1454,7 @@ var qpumpkin = {
         }
       }
       return res;
-    },object)
+    }.bind(this),object);//是在【sources】的reduce函数中，且传入的函数内部调用了【lodash】中的函数，在传的时候先绑定this。
   },
   findKey: function (object,predicate) {
     predicate = this.iteratee(predicate);
@@ -1870,7 +1870,7 @@ var qpumpkin = {
       }
     }
   },
-  unescape: function (string=""){
+  unescape: function (string="") {
     const objStr = Object(string);
     const map = new Map([
       ['&amp;','&'],
@@ -1882,15 +1882,15 @@ var qpumpkin = {
     let res = "";
     let escape = "&";
     for (let i=0; i<objStr.length; i++) {//【i】指字符串当前的位置，会在两个循环内用到。
-      const cur = objStr[i];//指当前正在处理的单个字符，会在多种情况使用。
+      let cur = objStr[i];//指当前操作处理的单个字符，会在多种情况使用。
       if (cur === "&") {
         do {
           i += 1;
           cur = objStr[i];
           escape += cur;
         } while (cur !== ";");
+        res += map.get(escape);
         escape = "&";
-        res += escape;
       } else {
         res += cur;
       }
@@ -2044,7 +2044,6 @@ var qpumpkin = {
   // propertyOf:
   // function propertyOf(obj) {
   //   return function () {
-
   //   }
   // },
   identity: function (value) {
@@ -2137,7 +2136,6 @@ var qpumpkin = {
   },
   // reduce:
   // function reduce(collection,func,accumulator) {
-
   // },
 };
 function sliceArray(array,begin=0,end=array.length,step=1) {
