@@ -1,0 +1,137 @@
+.resume {
+  display: flex;
+  width: 800px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  --leftBackground: #00bfa5;
+  --fontcolor: white;
+  --leftFontColor: #9f3;
+  --rightLinkColor: #0ED119;
+  --rightTitleColor: #00796b;
+  --rightBackground: #f0f1f2;
+  --rightBorderColor: #00796b;
+  --rightPartH3: #004d40;
+  --describeColor: #616161;
+  --hightLightColor: #111;
+}
+ul {
+  list-style-type: none;
+  padding-left: 10px;
+  margin: 0;
+}
+dd {
+  margin: 0;
+  font-size: 12px;
+}
+p {
+  margin: 0;
+}
+h2 {
+  margin: 0;
+}
+a {
+  color: var(--fontcolor);
+}
+.left {
+  width: 250px;
+  flex-shrink: 0;
+  color: var(--fontcolor);
+  background: var(--leftBackground);
+}
+.left .base-info {
+  height: 180px;
+}
+
+.left .base-info .avatar {
+  width: 90px;
+  height: 90px;
+  margin: 30px auto 0;
+  overflow: hidden;
+  border-radius: 100%;
+}
+.left .base-info .avatar img {
+  width: 90px;
+  height: 90px;
+}
+.left .base-info p {
+  margin: 15px 0 5px;
+  text-align: center;
+  font-size: 20px;
+}
+.left .base-info blockquote {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+.person-info .info-item {
+  margin-bottom: 20px;
+}
+.person-info .info-item dt {
+  margin-bottom: 10px;
+  color: var(--leftFontColor);
+}
+.person-info .info-item dd {
+  padding-left: 2em;
+}
+
+
+.right {
+  width: 550px;
+  padding: 20px 10px;
+  background: var(--rightBackground);
+}
+.right-part h2 {
+  font-size: 18px;
+  color: var(--rightTitleColor);
+  border-bottom: 2px solid;
+  line-height: 2;
+}
+.right-part > h3 {
+  color: var(--rightPartH3);
+  margin: .5em 0;
+  font-size: 16px;
+}
+
+.right .part-detail {
+  border-left: 3px solid var(--rightBorderColor);
+  padding-left: 10px;
+}
+.right .part-detail .project-desc {
+  color: var(--describeColor);
+}
+.right .part-detail .part-item-title {
+  position: relative;
+  color: var(--hightLightColor);
+  font-weight: bolder;
+  margin: 10px 0;
+}
+.right .part-detail .profile-link {
+  color: var(--rightLinkColor);
+  line-height: inherit;
+}
+.right .part-detail .part-item-title .profile-link {
+  font-size: 12px;
+}
+.right .part-detail .part-item-title::before {
+  position: absolute;
+  content: "";
+  height: .5rem;
+  width: .5rem;
+  background: var(--rightTitleColor);
+  border-radius: 100%;
+  top: 50%;
+  left: -11.5px;
+  transform: translate(-50%, -50%);
+}
+.right .part-detail b {
+  color: var(--hightLightColor);
+}
+.right .project-desc {
+  margin-bottom: .7em;
+}
+.right .high-light {
+  color: var(--hightLightColor);
+  font-size: 12px;
+  margin-bottom: .5em;
+}
